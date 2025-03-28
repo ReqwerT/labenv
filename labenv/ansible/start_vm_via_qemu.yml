@@ -1,0 +1,135 @@
+---
+# Playbook name: Set up persistent QEMU VM on external drive with auto-start at login
+- name: QEMU Persistent VM on External Disk with Autostart
+  hosts: win  # Targets Windows hosts in the 'win' group
+  gather_facts: yes  # Gather system environment variables and facts
+
+  vars:
+    iso_path: "{{ ansible_env.USERPROFILE }}\\Downloads"  # Location to look for ISO files
+    external_path: "S:\\qemu"  # External disk path to store VM disk
+    disk_image: "S:\\qemu\\vm.qcow2"  # Location of the VM disk image
+    ram_mb: 2048  # Amount of RAM to allocate to the VM
+    cpu_count: 2  # Number of CPUs to assign to the VM
+    smb_share: "{{ ansible_env.USERPROFILE }}"  # SMB share path for host-guest file sharing
+    ps1_path: "C:\\qemu\\start-qemu.ps1"  # PowerShell script path to start the VM
+    bat_path: "{{ ansible_env.APPDATA }}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\start-qemu.bat"  # Startup .bat path
+
+  tasks:
+    - name: Ensure C:\qemu folder exists
+      ansible.windows.win_file:
+        path: "C:\\qemu"  # Create folder for logs and scripts
+        state: directory
+
+    - name: Create QEMU PowerShell script (ISO selection on first run)
+      ansible.windows.win_copy:
+        dest: "{{ ps1_path }}"  # Where to place the startup PowerShell script
+        content: |
+          # Define log, flag, and ISO tracking paths
+          $Log = "C:\qemu\log.txt"
+          $FlagPath = "C:\qemu\boot_flag.txt"
+          $SelectedISOPath = "C:\qemu\selected_iso.txt"
+          $qemuPath = "C:\Program Files\qemu"
+          $externalPath = "{{ external_path }}"
+          $diskImage = "{{ disk_image }}"
+          $bootFromISO = $true
+          $isoPath = ""
+
+          try {
+              Add-Content $Log "`nRunning QEMU at $(Get-Date)`n"
+
+              # Create external disk path if not present
+              if (-Not (Test-Path $externalPath)) {
+                  New-Item -Path $externalPath -ItemType Directory | Out-Null
+                  Add-Content $Log "Created directory: $externalPath"
+              }
+
+              # Create disk image if not present
+              if (-Not (Test-Path $diskImage)) {
+                  & "$qemuPath\qemu-img.exe" create -f qcow2 $diskImage 20G
+                  Add-Content $Log "Created new qcow2 disk: $diskImage"
+              } else {
+                  Add-Content $Log "Disk already exists, using existing: $diskImage"
+              }
+
+              # Check boot flag
+              if (Test-Path $FlagPath) {
+                  $flag = Get-Content $FlagPath
+                  if ($flag -eq "1") {
+                      $bootFromISO = $false  # Boot from disk directly
+                      Add-Content $Log "Flag is 1: booting from disk only"
+                  } else {
+                      Add-Content $Log "Flag is not 1: booting from ISO"
+                  }
+              } else {
+                  Add-Content $Log "Flag file does not exist"
+              }
+
+              # If booting from ISO
+              if ($bootFromISO) {
+                  # Prompt user to select ISO on first run
+                  if (-Not (Test-Path $SelectedISOPath)) {
+                      $isoFiles = Get-ChildItem "{{ iso_path }}" -Filter *.iso
+                      if ($isoFiles.Count -eq 0) {
+                          Add-Content $Log "No ISO files found in Downloads"
+                          throw "No ISO files found in Downloads"
+                      }
+
+                      Add-Content $Log "Listing available ISOs..."
+                      $options = $isoFiles | ForEach-Object { "$($_.Name)" }
+                      $selected = $Host.UI.PromptForChoice("ISO Selection", "Choose an ISO to boot from:", $options, 0)
+                      $chosenISO = $isoFiles[$selected].FullName
+                      Set-Content $SelectedISOPath $chosenISO
+                      Add-Content $Log "User selected ISO: $chosenISO"
+                      $isoPath = $chosenISO
+                  } else {
+                      $isoPath = Get-Content $SelectedISOPath
+                      Add-Content $Log "Using previously selected ISO: $isoPath"
+                  }
+
+                  # Set flag to 1 to skip ISO next time
+                  Set-Content $FlagPath "1"
+
+                  # Boot VM from ISO for first install
+                  & "$qemuPath\qemu-system-x86_64.exe" `
+                      -accel whpx `
+                      -m {{ ram_mb }} `
+                      -smp {{ cpu_count }} `
+                      -cdrom "$isoPath" `
+                      -boot once=d,menu=off `
+                      -drive file=$diskImage,format=qcow2 `
+                      -net user,smb="{{ smb_share }}" `
+                      -net nic `
+                      -vga virtio `
+                      -usb -device usb-tablet `
+                      -display gtk
+                  Add-Content $Log "Booted from ISO and updated flag"
+              } else {
+                  # Boot VM from existing disk
+                  & "$qemuPath\qemu-system-x86_64.exe" `
+                      -accel whpx `
+                      -m {{ ram_mb }} `
+                      -smp {{ cpu_count }} `
+                      -boot order=c,menu=off `
+                      -drive file=$diskImage,format=qcow2 `
+                      -net user,smb="{{ smb_share }}" `
+                      -net nic `
+                      -vga virtio `
+                      -usb -device usb-tablet `
+                      -display gtk
+                  Add-Content $Log "Booted from disk only"
+              }
+          }
+          catch {
+              Add-Content $Log "ERROR: $_"
+          }
+
+    - name: Create .bat file to launch QEMU script at user login
+      ansible.windows.win_copy:
+        dest: "{{ bat_path }}"  # Create startup .bat in Start Menu folder
+        content: |
+          powershell.exe -ExecutionPolicy Bypass -File "{{ ps1_path }}"
+
+    - name: Ensure .bat file is executable
+      ansible.windows.win_file:
+        path: "{{ bat_path }}"  # Mark the .bat file as read-only (optional)
+        attributes: 'readonly'
