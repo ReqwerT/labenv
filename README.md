@@ -19,7 +19,7 @@ The setup allows QEMU to be installed and managed on the `P5` machine through An
 2. **Install Vagrant**
    - Ensure you have Vagrant installed on your system.
 
-3. **Ensure Ansible is installed and configured on `P4` machine**
+3. **Ensure Ansible is installed and configured on `P3` machine**
 
 ---
 
