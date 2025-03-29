@@ -28,6 +28,18 @@ You should see the installed Ansible version details if the installation was suc
 
 ---
 
+### Step 2: Install Pywinrm
+
+Since `pywinrm` dependencies aren't shipped with Ansible Engine (and these are necessary for using WinRM), make sure you install the `pywinrm`-related library on the machine that Ansible is installed on. The simplest method is to run:
+
+```bash
+pip install pywinrm
+```
+
+This will ensure that Ansible can communicate with Windows hosts using WinRM.
+
+---
+
 ## Deploying Ansible Playbook to Ubuntu 22.04 VM
 
 After running `vagrant up` and successfully starting the virtual machine, you need to transfer the necessary `.yml` Ansible playbook files into the Ubuntu 22.04 VM. There are two main ways to achieve this:
