@@ -42,7 +42,7 @@ This will start both machines.
 vagrant rdp
 ```
 
-- For `P4` (Ansible machine):
+- For `P3` (Ansible machine):
 ```powershell
 vagrant ssh
 ```
