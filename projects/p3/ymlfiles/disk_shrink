@@ -1,0 +1,60 @@
+---
+# Playbook name: Shrinks C: drive and creates a new partition with user-defined size and file system
+- name: Shrink C drive and create new partition
+  hosts: win  # Target hosts in the 'win' inventory group
+  gather_facts: no  # Skips automatic fact gathering to speed up execution
+
+  vars_prompt:
+    - name: shrink_size_gb
+      prompt: "How many GB to shrink? (ex: 5)"  # Prompt user for how many GB to shrink
+      private: no
+
+    - name: fs_type
+      prompt: "What is file system type? (exFAT, NTFS, FAT32)"  # Prompt user for desired file system
+      private: no
+
+  vars:
+    shrink_size_mb: "{{ shrink_size_gb | int * 1024 }}"  # Convert GB to MB
+    drive_letter: "T"  # The new drive letter to assign
+
+  tasks:
+    - name: Ensure QEMU script folder exists
+      win_file:
+        path: "C:\\qemu"  # Make sure the folder for the script exists
+        state: directory
+
+    - name: Generate PowerShell script to shrink C and create new volume
+      win_copy:
+        dest: C:\\qemu\\create-partition.ps1  # Where to place the script
+        content: |
+          # PowerShell script starts here
+          $shrinkSize = {{ shrink_size_mb }}
+          $fsType = "{{ fs_type }}"
+          $driveLetter = "{{ drive_letter }}"
+
+          $partition = Get-Partition -DriveLetter C
+          $sizeBefore = (Get-Volume -DriveLetter C).SizeRemaining
+
+          try {
+              # Shrink C drive by specified amount
+              Resize-Partition -DriveLetter C -Size ($partition.Size - ($shrinkSize * 1MB)) -ErrorAction Stop
+              Start-Sleep -Seconds 2
+
+              # Get the disk and create a new partition in the unallocated space
+              $disk = Get-Disk | Where-Object { $_.PartitionStyle -ne 'RAW' -and $_.Number -eq $partition.DiskNumber }
+              $newPartition = New-Partition -DiskNumber $disk.Number -UseMaximumSize -AssignDriveLetter -ErrorAction Stop
+
+              # Format the new partition with selected file system
+              Format-Volume -DriveLetter $newPartition.DriveLetter -FileSystem $fsType -Confirm:$false
+
+              # Set custom drive letter
+              Set-Partition -DriveLetter $newPartition.DriveLetter -NewDriveLetter $driveLetter
+
+              Write-Output "Disk created: ${driveLetter}: (${fsType})"
+          }
+          catch {
+              Write-Error "An error occurred: $_"
+          }
+
+    - name: Run PowerShell script
+      win_shell: powershell.exe -ExecutionPolicy Bypass -File "C:\\qemu\\create-partition.ps1"  # Execute the partitioning script
