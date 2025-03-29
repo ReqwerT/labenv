@@ -140,5 +140,3 @@ ansible-playbook qemu-setup.yml -i inventory_file
 - This setup is intended for Ubuntu 22.04 guests.
 
 ---
-
-Happy provisioning! 🚀
