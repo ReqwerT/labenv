@@ -85,7 +85,7 @@ If you prefer, you can manually create the Ansible playbook inside the virtual m
 Once the file is inside the VM, you can run the playbook using Ansible:
 
 ```bash
-ansible-playbook qemu-setup.yml -i inventory_file
+ansible-playbook qemu-setup.yml -i hosts.ini
 ```
 
 > ⚠️ Make sure Ansible is installed inside your VM and that the inventory file is correctly configured.
