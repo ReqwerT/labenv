@@ -1,5 +1,33 @@
 # README.md
 
+## Installing Ansible on Ubuntu 22.04 VM
+
+Before deploying the playbook, you need to install Ansible on your Ubuntu 22.04 virtual machine.
+
+### Step-by-step Installation
+
+1. **Update the package list:**
+
+```bash
+sudo apt update
+```
+
+2. **Install Ansible:**
+
+```bash
+sudo apt install ansible -y
+```
+
+3. **Verify the installation:**
+
+```bash
+ansible --version
+```
+
+You should see the installed Ansible version details if the installation was successful.
+
+---
+
 ## Deploying Ansible Playbook to Ubuntu 22.04 VM
 
 After running `vagrant up` and successfully starting the virtual machine, you need to transfer the necessary `.yml` Ansible playbook files into the Ubuntu 22.04 VM. There are two main ways to achieve this:
@@ -85,7 +113,7 @@ If you prefer, you can manually create the Ansible playbook inside the virtual m
 Once the file is inside the VM, you can run the playbook using Ansible:
 
 ```bash
-ansible-playbook qemu-setup.yml -i hosts.ini
+ansible-playbook qemu-setup.yml -i inventory_file
 ```
 
 > ⚠️ Make sure Ansible is installed inside your VM and that the inventory file is correctly configured.
