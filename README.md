@@ -139,6 +139,3 @@ vagrant rdp
 Ensure your `hosts.ini` file is properly configured to match the IP addresses of your virtual machines.
 
 ---
-
-## License
-This project is licensed under the MIT License.
