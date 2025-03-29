@@ -69,7 +69,7 @@ ansible win -i hosts.ini -m win_ping
 ---
 
 ## Installing QEMU
-Run the following command on the Ansible machine (`P4`):
+Run the following command on the Ansible machine (`P3`):
 
 ```bash
 ansible-playbook -i hosts.ini install_qemu.yml
