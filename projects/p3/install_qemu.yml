@@ -1,0 +1,19 @@
+---
+# Playbook name: Installs QEMU on Windows
+- name: Install QEMU on Windows
+  hosts: win  # Targets the 'win' group of Windows hosts
+  tasks:
+    - name: Download QEMU installer
+      win_get_url:
+        url: "https://qemu.weilnetz.de/w64/2025/qemu-w64-setup-20250210.exe"  # URL of the QEMU installer
+        dest: "C:\\Users\\{{ ansible_user | quote }}\\Downloads\\qemu_installer.exe"  # Download to the user's Downloads folder
+
+    - name: Install QEMU
+      win_command: "C:\\Users\\{{ ansible_user | quote }}\\Downloads\\qemu_installer.exe /S"  # Run installer silently
+      args:
+        creates: "C:\\Program Files\\qemu"  # Skip this step if QEMU is already installed
+
+    - name: Add QEMU to PATH
+      win_path:
+        elements:
+          - "C:\\Program Files\\qemu"  # Add QEMU directory to the system PATH environment variable
