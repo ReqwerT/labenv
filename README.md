@@ -49,9 +49,22 @@ vagrant ssh
 
 ---
 
-## Configuration Files
-- **Vagrantfile** and **yml files** are provided.
-- To manage your own machine using only the `Vagrantfile`, modify the IP addresses in `hosts.ini` to match your Windows virtual machine.
+## Configuring Ansible
+To enable Ansible management via WinRM, download and run the script:
+- [Download ConfigureRemotingForAnsible.ps1](https://github.com/ansible/ansible-documentation/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
+
+Hashes for verification:
+- MD5: `6f40af8ac2d28a524b54a4f3b79e5bf0`
+- SHA1: `f3f5621a2f19703e849fa5cb643819a621dbe0ab`
+- SHA256: `eba72df06e3e77709595f75d1d5b4d95b06602429dd2a3f7867406df875b0c70`
+- SHA512: `2cf08513bd74000280d37d1ca77c7e12e95140fdedc291849791340bfe5fe88d72c7281db03a6d065f352786adcb271a9556a04d0048941b9dd631b169918642`
+
+Run the script in Powershell with administrator privileges.
+
+Verify connection:
+```bash
+ansible win -i hosts.ini -m win_ping
+```
 
 ---
 
@@ -62,7 +75,7 @@ Run the following command on the Ansible machine (`P4`):
 ansible-playbook -i hosts.ini install_qemu.yml
 ```
 
-This will install QEMU on the target machine after some time.
+This will install QEMU 9.2.50 on the target machine and update the `PATH` variable. A restart is required to apply changes.
 
 ### Installing Vagrant on the Target Machine
 If you wish to install Vagrant:
@@ -93,6 +106,11 @@ To start the VM:
 ansible-playbook -i hosts.ini start_vm_via_qemu.yml
 ```
 
+After execution, restart the system and connect using:
+```powershell
+vagrant rdp
+```
+
 ### What This Playbook Does
 - Creates necessary files in a specified folder.
 - Places a `.bat` file in the startup folder to ensure the VM starts with Windows.
@@ -115,17 +133,7 @@ ansible-playbook -i hosts.ini start_vm_via_qemu.yml
 
 ---
 
-## Example Setup Diagram
 
-![Setup Diagram](images/setup_diagram.png)
-
----
-
-## Example Boot Process Flow
-
-![Boot Process](images/boot_process.png)
-
----
 
 ## Troubleshooting
 Ensure your `hosts.ini` file is properly configured to match the IP addresses of your virtual machines.
