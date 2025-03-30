@@ -1,7 +1,7 @@
 # QEMU Virtual Machine Management with Ansible and Vagrant
 
 ## Overview
-This project involves setting up two virtual machines (`P3` and `P5`) using Vagrant on Hyper-V. Ansible is used for managing these machines via a third machine (`P4`) that contains the necessary configuration files (`yml` files) and an inventory file (`hosts.ini`). The `P5` machine is a Windows virtual machine managed by Ansible.
+This project involves setting up two virtual machines (`P3` and `P5`) using Vagrant on Hyper-V. Ansible is used for managing these machines via (`P3`) that contains the necessary configuration files (`yml` files) and an inventory file (`hosts.ini`). The `P5` machine is a Windows virtual machine managed by Ansible.
 
 The setup allows QEMU to be installed and managed on the `P5` machine through Ansible playbooks.
 
