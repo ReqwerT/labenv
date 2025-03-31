@@ -1,4 +1,4 @@
-The project will update as soon possible..
+The lab environment will update as soon possible..
 
 
 
