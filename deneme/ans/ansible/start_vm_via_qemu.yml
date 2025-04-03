@@ -1,0 +1,111 @@
+---
+- name: QEMU Persistent VM with ISO Numbering
+  hosts: win  # Targets Windows hosts in the 'win' group
+  gather_facts: yes  # Gather system environment variables and facts
+
+  vars:
+    iso_search_path: "C:\\Users\\{{ ansible_user | quote }}\\Downloads"  # Dynamic ISO search path
+    disk_image: "C:\\qemu\\vm.qcow2"  # Location of the VM disk image (local disk C)
+    ram_mb: 2048  # Amount of RAM to allocate to the VM
+    cpu_count: 2  # Number of CPUs to assign to the VM
+    smb_share: "192.168.56.31/Users/vagrant/shared_f"  # SMB share path for host-guest file sharing
+    ps1_path: "C:\\qemu\\start-qemu.ps1"  # PowerShell script path to start the VM
+    bat_path: "{{ ansible_env.APPDATA }}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\start-qemu.bat"
+
+  tasks:
+    - name: Ensure C:\\qemu folder exists
+      ansible.windows.win_file:
+        path: "C:\\qemu"
+        state: directory
+
+    - name: Create QEMU PowerShell script (ISO selection on first run)
+      ansible.windows.win_copy:
+        dest: "{{ ps1_path }}"
+        content: |
+          # Define log, flag, and ISO tracking paths
+          $Log = "C:\\qemu\\log.txt"
+          $FlagPath = "C:\\qemu\\boot_flag.txt"
+          $SelectedISOPath = "C:\\qemu\\selected_iso.txt"
+          $qemuPath = "C:\\Program Files\\qemu"
+          $diskImage = "{{ disk_image }}"
+          $bootFromISO = $true
+          $isoPath = ""
+
+          try {
+              Add-Content $Log "`nRunning QEMU at $(Get-Date)`n"
+
+              # Create disk image if not present
+              if (-Not (Test-Path $diskImage)) {
+                  & "$qemuPath\qemu-img.exe" create -f qcow2 $diskImage 20G
+                  Add-Content $Log "Created new qcow2 disk: $diskImage"
+              } else {
+                  Add-Content $Log "Disk already exists, using existing: $diskImage"
+              }
+
+              # Check boot flag
+              if (Test-Path $FlagPath) {
+                  $flag = Get-Content $FlagPath
+                  if ($flag -eq "1") {
+                      $bootFromISO = $false
+                      Add-Content $Log "Flag is 1: booting from disk only"
+                  } else {
+                      Add-Content $Log "Flag is not 1: booting from ISO"
+                  }
+              } else {
+                  Add-Content $Log "Flag file does not exist"
+              }
+
+              # If booting from ISO
+              if ($bootFromISO) {
+                  if (-Not (Test-Path $SelectedISOPath)) {
+                      $isoFiles = Get-ChildItem -Path "{{ iso_search_path }}" -Recurse -Filter *.iso
+                      if ($isoFiles.Count -eq 0) {
+                          Add-Content $Log "No ISO files found in {{ iso_search_path }}"
+                          throw "No ISO files found in {{ iso_search_path }}"
+                      }
+
+                      Add-Content $Log "Listing available ISOs..."
+                      $options = @{ }
+                      $counter = 1
+                      foreach ($iso in $isoFiles) {
+                          $options[$counter] = $iso.FullName
+                          Write-Host "$counter. $($iso.Name)"
+                          $counter++
+                      }
+
+                      $selection = Read-Host "Enter the number of the ISO you want to boot from"
+                      if ($options.ContainsKey([int]$selection)) {
+                          $chosenISO = $options[[int]$selection]
+                          Set-Content $SelectedISOPath $chosenISO
+                          Add-Content $Log "User selected ISO: $chosenISO"
+                          $isoPath = $chosenISO
+                      } else {
+                          Add-Content $Log "Invalid selection"
+                          throw "Invalid selection. Restart the script."
+                      }
+                  } else {
+                      $isoPath = Get-Content $SelectedISOPath
+                      Add-Content $Log "Using previously selected ISO: $isoPath"
+                  }
+
+                  Set-Content $FlagPath "1"
+
+                  & "$qemuPath\qemu-system-x86_64.exe" -accel whpx -m {{ ram_mb }} -smp {{ cpu_count }} -cdrom "$isoPath" -drive file=$diskImage,format=qcow2 -boot order=d,menu=on -net nic,model=virtio -net user,hostfwd=tcp::5555-:22,net=192.168.56.0/24,dhcpstart=192.168.56.66,smb="{{ smb_share }}" -vga virtio -usb -device usb-tablet -display gtk
+              } else {
+                  & "$qemuPath\qemu-system-x86_64.exe" -accel whpx -m {{ ram_mb }} -smp {{ cpu_count }} -boot order=c,menu=off -drive file=$diskImage,format=qcow2 -net nic,model=virtio -net user,hostfwd=tcp::5555-:22,net=192.168.56.0/24,dhcpstart=192.168.56.66,smb="{{ smb_share }}" -vga virtio -usb -device usb-tablet -display gtk
+              }
+          }
+          catch {
+              Add-Content $Log "ERROR: $_"
+          }
+
+    - name: Create .bat file to launch QEMU script at user login
+      ansible.windows.win_copy:
+        dest: "{{ bat_path }}"
+        content: |
+          powershell.exe -ExecutionPolicy Bypass -File "{{ ps1_path }}"
+
+    - name: Ensure .bat file is executable
+      ansible.windows.win_file:
+        path: "{{ bat_path }}"
+        attributes: 'readonly'
