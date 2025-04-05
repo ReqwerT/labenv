@@ -18,7 +18,7 @@
      ```
      vagrant up
      ```
-   - This will start your Ansible machine. Upon startup, it will sequentially execute the commands in the `req.sh` file, install the latest version of QEMU on your Windows machine, and set up the necessary startup configurations for the virtual machine to launch.
+   - This will start your Ansible machine. Upon startup, it will sequentially execute the commands in the `commands.sh` file, install the latest version of QEMU on your Windows machine, and set up the necessary startup configurations for the virtual machine to launch.
 
 3. **Testing the Environment:**
    - After a successful installation, you can test your virtual environment.
