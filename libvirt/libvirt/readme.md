@@ -22,3 +22,7 @@
 
 3. **Testing the Environment:**
    - After a successful installation, you can test your virtual environment.
+
+4. **Configuring IP Addresses:**
+   - If you want to use a different IP address configuration while managing your server, update the static IP addresses in the Vagrantfiles according to your preferences. 
+   - Don't forget to update the IP address in the `hosts.ini` file as well.
