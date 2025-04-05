@@ -1,0 +1,24 @@
+Vagrant.configure('2') do |config|
+  (1..1).each do |i|
+    config.vm.define "webserver" do |machine|
+      machine.vm.box = 'it-gro/win10-ltsc-eval'
+      machine.vm.network "private_network", ip: '192.168.121.15'
+      machine.vm.hostname = "webserver"
+      
+      machine.vm.provider "libvirt" do |libvirt|
+        libvirt.cpus = 2
+        libvirt.memory = 8192
+        libvirt.disk_bus = "virtio"  # Diskleri daha hızlı kullanmak için
+        libvirt.nic_model_type = "virtio"  # Ağ bağlantısını hızlandırmak için
+        libvirt.driver = "kvm"
+        libvirt.machine_type = "q35"  # Modern PCIe desteği için
+        libvirt.video_type = "qxl"  # Virtio yerine qxl kullanmak
+        libvirt.graphics_type = "spice"  # Grafik arabirimi olarak Spice kullanmak
+      end
+
+      # Provisioning block to run the PowerShell script as Administrator
+      machine.vm.provision "shell", privileged: true, path: "codes/ConfigureRemotingForAnsible.ps1"
+    end
+  end
+end
+

@@ -1,0 +1,122 @@
+---
+- name: QEMU Persistent VM with ISO Numbering
+  hosts: win  # Windows makineleri hedef alır
+  gather_facts: yes  # Sistem bilgilerini toplar
+
+  vars:
+    iso_search_path: "C:\\Users\\{{ ansible_user | quote }}\\Downloads"
+    disk_image: "C:\\qemu\\vm.qcow2"
+    ram_mb: 4096
+    cpu_count: 2
+    smb_share: "192.168.121.15/Users/vagrant/shared_f"
+    ps1_path: "C:\\qemu\\start-qemu.ps1"
+    bat_path: "{{ ansible_env.APPDATA }}\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\start-qemu.bat"
+
+  tasks:
+    - name: Hyper-V özelliğini etkinleştir
+      ansible.windows.win_command:
+        cmd: powershell -Command "Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All -NoRestart -All"
+      ignore_errors: yes
+
+    - name: Virtual Machine Platform özelliğini etkinleştir
+      ansible.windows.win_command:
+        cmd: powershell -Command "Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -NoRestart -All"
+      ignore_errors: yes
+
+    - name: Hypervisor Platform özelliğini etkinleştir
+      ansible.windows.win_command:
+        cmd: powershell -Command "Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -NoRestart -All"
+      ignore_errors: yes
+
+    - name: C:\\qemu klasörünün varlığını sağla
+      ansible.windows.win_file:
+        path: "C:\\qemu"
+        state: directory
+
+    - name: QEMU PowerShell betiğini oluştur (İlk çalıştırmada ISO seçimi)
+      ansible.windows.win_copy:
+        dest: "{{ ps1_path }}"
+        content: |
+          # Log, flag, ve ISO yollarını tanımla
+          $Log = "C:\\qemu\\log.txt"
+          $FlagPath = "C:\\qemu\\boot_flag.txt"
+          $SelectedISOPath = "C:\\qemu\\selected_iso.txt"
+          $qemuPath = "C:\\Program Files\\qemu"
+          $diskImage = "{{ disk_image }}"
+          $bootFromISO = $true
+          $isoPath = ""
+
+          try {
+              Add-Content $Log "`nQEMU Başlatılıyor $(Get-Date)`n"
+
+              if (-Not (Test-Path $diskImage)) {
+                  & "$qemuPath\qemu-img.exe" create -f qcow2 $diskImage 20G
+                  Add-Content $Log "Yeni qcow2 disk oluşturuldu: $diskImage"
+              } else {
+                  Add-Content $Log "Disk zaten mevcut: $diskImage"
+              }
+
+              if (Test-Path $FlagPath) {
+                  $flag = Get-Content $FlagPath
+                  if ($flag -eq "1") {
+                      $bootFromISO = $false
+                      Add-Content $Log "Flag dosyası 1: Diskten başlatılıyor"
+                  } else {
+                      Add-Content $Log "Flag dosyası 1 değil: ISO'dan başlatılıyor"
+                  }
+              } else {
+                  Add-Content $Log "Flag dosyası bulunamadı"
+              }
+
+              if ($bootFromISO) {
+                  if (-Not (Test-Path $SelectedISOPath)) {
+                      $isoFiles = Get-ChildItem -Path "{{ iso_search_path }}" -Recurse -Filter *.iso
+                      if ($isoFiles.Count -eq 0) {
+                          Add-Content $Log "Hiç ISO dosyası bulunamadı {{ iso_search_path }}"
+                          throw "ISO dosyası bulunamadı {{ iso_search_path }}"
+                      }
+
+                      $options = @{ }
+                      $counter = 1
+                      foreach ($iso in $isoFiles) {
+                          $options[$counter] = $iso.FullName
+                          Write-Host "$counter. $($iso.Name)"
+                          $counter++
+                      }
+
+                      $selection = Read-Host "Başlatmak istediğiniz ISO numarasını girin"
+                      if ($options.ContainsKey([int]$selection)) {
+                          $chosenISO = $options[[int]$selection]
+                          Set-Content $SelectedISOPath $chosenISO
+                          Add-Content $Log "Seçilen ISO: $chosenISO"
+                          $isoPath = $chosenISO
+                      } else {
+                          Add-Content $Log "Geçersiz seçim"
+                          throw "Geçersiz seçim. Betiği yeniden çalıştırın."
+                      }
+                  } else {
+                      $isoPath = Get-Content $SelectedISOPath
+                      Add-Content $Log "Daha önce seçilen ISO kullanılıyor: $isoPath"
+                  }
+
+                  Set-Content $FlagPath "1"
+
+                  & "$qemuPath\qemu-system-x86_64.exe" -accel whpx -m {{ ram_mb }} -smp {{ cpu_count }} -cdrom "$isoPath" -drive file=$diskImage,format=qcow2 -boot order=d,menu=on -net nic,model=virtio -net user,hostfwd=tcp::5555-:22,net=192.168.121.0/24,dhcpstart=192.168.121.55,smb="{{ smb_share }}" -vga virtio -usb -device usb-tablet -display gtk
+              } else {
+                  & "$qemuPath\qemu-system-x86_64.exe" -accel whpx -m {{ ram_mb }} -smp {{ cpu_count }} -boot order=c,menu=off -drive file=$diskImage,format=qcow2 -net nic,model=virtio -net user,hostfwd=tcp::5555-:22,net=192.168.121.0/24,dhcpstart=192.168.121.55,smb="{{ smb_share }}" -vga virtio -usb -device usb-tablet -display gtk
+              }
+          }
+          catch {
+              Add-Content $Log "HATA: $_"
+          }
+
+    - name: QEMU başlatma betiği .bat dosyası oluştur
+      ansible.windows.win_copy:
+        dest: "{{ bat_path }}"
+        content: |
+          powershell.exe -ExecutionPolicy Bypass -File "{{ ps1_path }}"
+
+    - name: .bat dosyasının sadece okunabilir olmasını sağla
+      ansible.windows.win_file:
+        path: "{{ bat_path }}"
+        attributes: 'readonly'
