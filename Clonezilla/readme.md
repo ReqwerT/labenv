@@ -9,3 +9,7 @@ If you want to **take a disk image**, follow the detailed guide here:
 
 If you want to **Convert image folder to iso type**, follow the detailed guide here:  
 👉 [Convert Image to Iso Guide](md/ConvertImageToIso.md)
+
+
+If you want to **Revert From Image File**, follow the detailed guide here:  
+👉 [Revert From Image File Guide](md/RevertFromImageFile.md)
