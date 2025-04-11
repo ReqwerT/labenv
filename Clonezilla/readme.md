@@ -12,4 +12,4 @@ If you want to **Convert image folder to iso type**, follow the detailed guide h
 
 
 If you want to **Revert From Image File**, follow the detailed guide here:  
-👉 [Revert From Image File Guide](md/RevertFromImageFile.md)
+👉 [Revert From Image File Guide](md/RevertFromImage.md)
