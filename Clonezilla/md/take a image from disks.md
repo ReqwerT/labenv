@@ -61,7 +61,7 @@ sudo fdisk -l
 ## 🚀 5. Start Clonezilla via QEMU
 
 ```bash
-qemu-system-x86_64 -enable-kvm -m 4096 -smp 4 -boot d -cdrom /home/reqwert/Downloads/clonezilla.iso -drive file=/dev/nvme0n1,format=raw,if=virtio -drive file=/dev/sda,format=raw,if=virtio -vga virtio
+qemu-system-x86_64 -enable-kvm -m 4096 -smp 4 -boot d -cdrom path/your/clonezilla.iso -drive file=/dev/nvme0n1,format=raw,if=virtio -drive file=/dev/sda,format=raw,if=virtio -vga virtio
 ```
 
 ---
