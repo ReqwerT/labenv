@@ -1,22 +1,5 @@
-name: Test Matrix
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8, 3.9, 3.10]
-        os: [ubuntu-latest, windows-latest]
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-    - name: Run tests
-      run: pytest
+| Test Adı    | Sonuç    | Süre   |
+|-------------|----------|--------|
+| Test 1      | Başarılı | 0.5 sn |
+| Test 2      | Başarısız| 0.8 sn |
+| Test 3      | Başarılı | 0.4 sn |
