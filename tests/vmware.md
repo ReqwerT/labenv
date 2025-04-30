@@ -1,39 +1,83 @@
-vagrant plugin list : yüklü olan pluginleri listeler
+# Vagrant VMware Kurulum ve Kullanım
 
-vagrant plugin uninstall <plugin-adı> : yüklü olan bir plugini siler
+## Vagrant Plugin Komutları
 
-vagrant plugin install vagrant-vmware-desktop: vmware plugin yükler
+- **Yüklü olan pluginleri listelemek için:**
 
----
+  `vagrant plugin list`
 
-vagrant vmware utility yükleme:  
-`wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg`
+- **Yüklü olan bir plugini silmek için:**
 
-`echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list`
+  `vagrant plugin uninstall <plugin-adı>`
 
-`sudo apt update && sudo apt install vagrant`
+- **VMware plugin yüklemek için:**
 
-`vagrant vmware utility 1.0.14: https://releases.hashicorp.com/vagrant-vmware-utility/1.0.14/`
-
-yukarıdaki linki indirmek lazım  
-ardından:  
-`$ sudo mkdir -p /opt/vagrant-vmware-desktop/bin`  
-`$ sudo unzip -d /opt/vagrant-vmware-desktop/bin vagrant-vmware-utility_1.0.0_linux_amd64.zip`
-
-After the executable has been installed, the utility setup tasks must be run. First, generate the required certificates:
-
-`$ sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility certificate generate`
-
-The path provided from this command can be used to set the utility_certificate_path in the Vagrantfile configuration if installing to a non-standard path.
-
-Finally, install the service. This will also enable the service.
-
-`$ sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility service install`
+  `vagrant plugin install vagrant-vmware-desktop`
 
 ---
 
-KUllanılan box: (win10):  
-`https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-10`
+## Vagrant VMware Utility Kurulumu
 
-Kullanılan Box: (win11):  
-`https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-11`
+### 1. HashiCorp GPG Anahtarını ve Repo Kaynağını Ekleme
+
+Öncelikle, HashiCorp GPG anahtarını indirip sisteminize eklemeniz gerekiyor. Aşağıdaki komutları sırayla çalıştırın:
+
+- GPG anahtarını ekleyin:
+
+  `wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg`
+
+- Repo kaynağını ekleyin:
+
+  `echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list`
+
+- Vagrant'ı kurun:
+
+  `sudo apt update && sudo apt install vagrant`
+
+---
+
+### 2. VMware Utility 1.0.14 İndirip Kurma
+
+VMware utility'yi [buradan](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.14/) indirin.
+
+İndirme işlemi tamamlandıktan sonra, utility'yi kurmak için şu komutları çalıştırın:
+
+- Gerekli dizini oluşturun:
+
+  `sudo mkdir -p /opt/vagrant-vmware-desktop/bin`
+
+- İndirilen dosyayı çıkartın:
+
+  `sudo unzip -d /opt/vagrant-vmware-desktop/bin vagrant-vmware-utility_1.0.0_linux_amd64.zip`
+
+---
+
+### 3. Sertifika Oluşturma
+
+Kurulum tamamlandıktan sonra, gerekli sertifikaları oluşturmanız gerekiyor. Bunun için şu komutu çalıştırın:
+
+`sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility certificate generate`
+
+> Bu komutun çıktısı, `Vagrantfile` dosyasındaki `utility_certificate_path` alanına eklenebilir.
+
+---
+
+### 4. Servisi Kurma ve Başlatma
+
+Son adımda, VMware utility servisini kurmak ve başlatmak için şu komutu kullanın:
+
+`sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility service install`
+
+---
+
+## Kullanılan Box'lar
+
+- **Windows 10**:  
+  `https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-10`
+
+- **Windows 11**:  
+  `https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-11`
+
+---
+
+Bu düzenleme ile adımları daha net ve anlaşılır şekilde sunmaya çalıştım. Umarım şimdi istediğiniz gibi olmuştur!
