@@ -1,76 +1,76 @@
-# Vagrant VMware Kurulum ve Kullanım
+# Vagrant VMware Installation and Usage
 
-## Vagrant Plugin Komutları
+## Vagrant Plugin Commands
 
-- **Yüklü olan pluginleri listelemek için:**
+- **To list the installed plugins:**
 
   `vagrant plugin list`
 
-- **Yüklü olan bir plugini silmek için:**
+- **To uninstall an installed plugin:**
 
-  `vagrant plugin uninstall <plugin-adı>`
+  `vagrant plugin uninstall <plugin-name>`
 
-- **VMware plugin yüklemek için:**
+- **To install the VMware plugin:**
 
   `vagrant plugin install vagrant-vmware-desktop`
 
 ---
 
-## Vagrant VMware Utility Kurulumu
+## Vagrant VMware Utility Installation
 
-### 1. HashiCorp GPG Anahtarını ve Repo Kaynağını Ekleme
+### 1. Add HashiCorp GPG Key and Repo Source
 
-Öncelikle, HashiCorp GPG anahtarını indirip sisteminize eklemeniz gerekiyor. Aşağıdaki komutları sırayla çalıştırın:
+First, you need to download and add the HashiCorp GPG key to your system. Run the following commands:
 
-- GPG anahtarını ekleyin:
+- Add the GPG key:
 
   `wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg`
 
-- Repo kaynağını ekleyin:
+- Add the repo source:
 
   `echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list`
 
-- Vagrant'ı kurun:
+- Install Vagrant:
 
   `sudo apt update && sudo apt install vagrant`
 
 ---
 
-### 2. VMware Utility 1.0.14 İndirip Kurma
+### 2. Download and Install VMware Utility 1.0.14
 
-VMware utility'yi [buradan](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.14/) indirin.
+Download VMware utility from [here](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.14/).
 
-İndirme işlemi tamamlandıktan sonra, utility'yi kurmak için şu komutları çalıştırın:
+Once the download is complete, install the utility using the following commands:
 
-- Gerekli dizini oluşturun:
+- Create the necessary directory:
 
   `sudo mkdir -p /opt/vagrant-vmware-desktop/bin`
 
-- İndirilen dosyayı çıkartın:
+- Unzip the downloaded file:
 
   `sudo unzip -d /opt/vagrant-vmware-desktop/bin vagrant-vmware-utility_1.0.0_linux_amd64.zip`
 
 ---
 
-### 3. Sertifika Oluşturma
+### 3. Generate Certificates
 
-Kurulum tamamlandıktan sonra, gerekli sertifikaları oluşturmanız gerekiyor. Bunun için şu komutu çalıştırın:
+Once the installation is complete, you need to generate the required certificates. Run the following command:
 
 `sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility certificate generate`
 
-> Bu komutun çıktısı, `Vagrantfile` dosyasındaki `utility_certificate_path` alanına eklenebilir.
+> The output of this command can be used to set the `utility_certificate_path` in the `Vagrantfile` if installing to a non-standard path.
 
 ---
 
-### 4. Servisi Kurma ve Başlatma
+### 4. Install and Start the Service
 
-Son adımda, VMware utility servisini kurmak ve başlatmak için şu komutu kullanın:
+In the final step, use the following command to install and start the VMware utility service:
 
 `sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility service install`
 
 ---
 
-## Kullanılan Box'lar
+## Boxes Used
 
 - **Windows 10**:  
   `https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-10`
@@ -80,4 +80,7 @@ Son adımda, VMware utility servisini kurmak ve başlatmak için şu komutu kull
 
 ---
 
-Bu düzenleme ile adımları daha net ve anlaşılır şekilde sunmaya çalıştım. Umarım şimdi istediğiniz gibi olmuştur!
+## Resources
+
+- [Vagrant VMware Utility Documentation](https://developer.hashicorp.com/vagrant/docs/providers/vmware/vagrant-vmware-utility)
+- [Vagrant VMware Installation Guide](https://developer.hashicorp.com/vagrant/docs/providers/vmware/installation)
