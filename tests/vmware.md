@@ -1,63 +1,39 @@
+vagrant plugin list : yüklü olan pluginleri listeler
 
-# Vagrant VMware Kurulum ve Kullanım
+vagrant plugin uninstall <plugin-adı> : yüklü olan bir plugini siler
 
-## Vagrant Plugin Komutları
-
-Yüklü olan pluginleri listelemek için:
-
-vagrant plugin list
-
-Yüklü olan bir plugini silmek için:
-
-vagrant plugin uninstall <plugin-adı>
-
-VMware plugin yüklemek için:
-
-vagrant plugin install vagrant-vmware-desktop
+vagrant plugin install vagrant-vmware-desktop: vmware plugin yükler
 
 ---
 
-## Vagrant VMware Utility Kurulumu
+vagrant vmware utility yükleme:  
+`wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg`
 
-### HashiCorp GPG Anahtarını ve Repo Kaynağını Ekleme
+`echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list`
 
-wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+`sudo apt update && sudo apt install vagrant`
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+`vagrant vmware utility 1.0.14: https://releases.hashicorp.com/vagrant-vmware-utility/1.0.14/`
 
-sudo apt update && sudo apt install vagrant
+yukarıdaki linki indirmek lazım  
+ardından:  
+`$ sudo mkdir -p /opt/vagrant-vmware-desktop/bin`  
+`$ sudo unzip -d /opt/vagrant-vmware-desktop/bin vagrant-vmware-utility_1.0.0_linux_amd64.zip`
 
----
+After the executable has been installed, the utility setup tasks must be run. First, generate the required certificates:
 
-### VMware Utility 1.0.14 İndirip Kurma
+`$ sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility certificate generate`
 
-VMware utility'yi [buradan](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.14/) indir.
+The path provided from this command can be used to set the utility_certificate_path in the Vagrantfile configuration if installing to a non-standard path.
 
-Ardından:
+Finally, install the service. This will also enable the service.
 
-sudo mkdir -p /opt/vagrant-vmware-desktop/bin  
-sudo unzip -d /opt/vagrant-vmware-desktop/bin vagrant-vmware-utility_1.0.0_linux_amd64.zip
-
----
-
-### Sertifika Oluşturma
-
-sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility certificate generate
-
-> Bu komut sonucunda verilen yol, `Vagrantfile` dosyasındaki `utility_certificate_path` alanına eklenebilir.
+`$ sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility service install`
 
 ---
 
-### Servisi Kurma ve Başlatma
+KUllanılan box: (win10):  
+`https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-10`
 
-sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility service install
-
----
-
-## Kullanılan Box'lar
-
-- **Windows 10**:  
-  `https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-10`
-
-- **Windows 11**:  
-  `https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-11`
+Kullanılan Box: (win11):  
+`https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-11`
