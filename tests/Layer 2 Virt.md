@@ -120,24 +120,6 @@ $workDir = "$env:USERPROFILE\vagrant_hyperv_vm"
 if (!(Test-Path $workDir)) {
     New-Item -ItemType Directory -Path $workDir
 }
-
-# 5. Write Vagrantfile
-$VagrantfileContent = @"
-Vagrant.configure("2") do |config|
-  config.vm.box = "ashrafmuqlis/debiandesktop"
-
-  config.vm.provider "hyperv" do |hv|
-    hv.memory = 8192
-  end
-end
-"@
-
-$VagrantfilePath = Join-Path $workDir "Vagrantfile"
-$VagrantfileContent | Out-File -Encoding ASCII -FilePath $VagrantfilePath
-
-# 6. Initialize VM
-cd $workDir
-vagrant up --provider=hyperv
 ```
 
 ---
