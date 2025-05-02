@@ -30,20 +30,36 @@ vagrant-libvirt (0.12.2, global)
 ### Vagrantfile Content
 ```ruby
 Vagrant.configure("2") do |config|
-  config.vm.box = "jtarpley/w11_23h2_base"
+  config.vm.define "default" do |machine|
+    machine.vm.box = "stromweld/windows-10"
+    machine.vm.communicator = "winrm"
+    machine.winrm.username = "vagrant"
+    machine.winrm.password = "vagrant"
+    config.vm.communicator = "winrm"
+    machine.vm.provider :libvirt do |libvirt|
+      libvirt.driver = "kvm"
+      libvirt.uri = "qemu:///system"
 
-  config.vm.provider :libvirt do |libvirt|
-    libvirt.driver = "kvm"
-    libvirt.uri = "qemu:///system"
-    libvirt.memory = 4096
-    libvirt.cpus = 2
-    libvirt.disk_bus = "virtio"
-    libvirt.management_network_device = "virbr0"
-    libvirt.nic_model_type = "virtio"
-    libvirt.graphics_type = "spice"
-    libvirt.video_type = "qxl"
+      libvirt.memory = 16384
+      libvirt.cpus = 4         # Bu da
+      libvirt.disk_bus = "virtio"
+
+      libvirt.management_network_device = "virbr0"
+      libvirt.nic_model_type = "virtio"
+
+      libvirt.graphics_type = "spice"
+      libvirt.video_type = "qxl"
+
+      libvirt.cpu_mode = "host-passthrough"
+    end
+
+    machine.vm.provision "file", source: "bootstrap.ps1", destination: "C:\\Users\\vagrant\\bootstrap.ps1"
+    machine.vm.provision "shell", inline: <<-SHELL
+      powershell.exe -ExecutionPolicy Bypass -File C:\\Users\\vagrant\\bootstrap.ps1
+    SHELL
   end
 end
+
 ```
 
 From the directory containing the Vagrantfile:
