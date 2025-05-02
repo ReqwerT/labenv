@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
       libvirt.uri = "qemu:///system"
 
       libvirt.memory = 16384
-      libvirt.cpus = 4         # Bu da
+      libvirt.cpus = 4       
       libvirt.disk_bus = "virtio"
 
       libvirt.management_network_device = "virbr0"
