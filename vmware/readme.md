@@ -1,6 +1,51 @@
 # QEMU VM Automation Project (Ansible + Vagrant + Windows)
 
-This project enables **automatic startup of QEMU virtual machines on a Windows host**, orchestrated from a **Vagrant-based Ansible control node**. The process is fully automated: `.qcow2` disk images are scanned on the Ansible VM, scripts are generated for each, and Windows runs these scripts at GUI login.
+Before using this project, make sure the following components are installed on your system:
+
+- **To install Vagrant**: [https://developer.hashicorp.com/vagrant/downloads](https://developer.hashicorp.com/vagrant/downloads)
+- **To install the Vagrant VMware plugin**: [https://developer.hashicorp.com/vagrant/docs/vmware](https://developer.hashicorp.com/vagrant/docs/vmware)
+- **To install VMware Workstation (Pro or Player)**: [https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html](https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html)
+
+---
+
+## ⚙️ System Requirements
+
+- **Vagrant version**: `2.4.5`
+- **VMware software**: `VMware Workstation Player`
+- **Vagrant boxes used**:
+  - `gusztavvargadr/ubuntu-desktop-2204-lts` (for the Ansible control machine)
+  - `gusztavvargadr/windows-11` (for the Windows QEMU host)
+- **QCOW2 disk images used in this project**:
+  - `debian-10-openstack-amd64.qcow2`
+  - `kali-linux-2025.1c-qemu-amd64.qcow2`
+
+> ⚠️ **These are the QCOW2 images I used for testing. You should use any QCOW2-based OS image you prefer by placing it in the `win11/images` folder.**
+
+---
+
+## 🚀 Getting Started
+
+1. **Clone or download** this project to your local machine.
+2. **Place your desired QCOW2-based OS image(s)** into the `win11/images` folder.
+3. Open a terminal, navigate to the `win11` directory, and run:
+
+   ```bash
+   vagrant up
+   ```
+
+   This will start the Windows 11 VM and automatically configure WinRM for Ansible access.
+
+4. Then, navigate to the `ans` directory and run:
+
+   ```bash
+   vagrant up
+   ```
+
+   This launches the Ansible control machine (Ubuntu) and runs the provisioning steps automatically.
+
+5. Once provisioning completes, **restart the Windows VM**.
+
+> ✅ Upon reboot, Windows will automatically launch QEMU with WHPX acceleration and boot the virtual machines defined by your QCOW2 images. This happens **every time** the system restarts.
 
 ---
 
@@ -33,48 +78,41 @@ This project enables **automatic startup of QEMU virtual machines on a Windows h
 
 ## ⚙️ How It Works
 
-1. Launch the Ansible control VM via Vagrant.
-2. The local `win/images` folder is mounted into the Ansible VM as `/home/vagrant/shared_images`.
-3. Ansible scans that folder for `.qcow2` files.
-4. On the Windows host:
-   - A PowerShell script (`start_vm_*.ps1`) is created for each disk.
-   - A `.bat` launcher is placed in the Startup folder to execute it.
-5. When the Windows GUI session starts, each VM is launched via PowerShell and QEMU.
+1. Vagrant launches an Ubuntu-based Ansible control VM.
+2. The `win/images` folder is shared via Vagrant as `/home/vagrant/shared_images`.
+3. Ansible scans this directory for `.qcow2` disk files.
+4. For each disk:
+   - A PowerShell script is created in `C:\vagrant_vm_boot`
+   - A `.bat` file is added to the Startup folder to execute it
+5. On GUI login, Windows runs each script, which starts the virtual machines via QEMU with WHPX acceleration.
 
 ---
 
 ## 💾 Accessing `.qcow2` Disks
 
-- Ansible reads file names from `/home/vagrant/shared_images`.
-- Windows accesses these disks from `Z:\-vagrant\images\` (via VMware Shared Folders).
-- Each generated script refers to `Z:\-vagrant\images\your-disk.qcow2`.
+- The Ansible VM reads disk filenames from `/home/vagrant/shared_images`
+- Windows accesses the same files via `Z:\-vagrant\images\` (VMware Shared Folders)
+- Each QEMU command in the scripts points to the appropriate path on `Z:`
 
 ---
 
 ## 🧪 Usage
 
-To execute the playbooks:
+To execute the provisioning:
 
 ```bash
 ansible-playbook -i scripts/hosts.ini scripts/qemu_install.yml
 ansible-playbook -i scripts/hosts.ini scripts/start_vm.yml
 ```
 
----
-
-## ✅ Outcome
-
-- `.qcow2` disks are automatically discovered.
-- VMs are launched on GUI login via PowerShell scripts.
-- The entire setup is automated through Ansible.
-- No manual action is required on the Windows host.
+> - `qemu_install.yml`: Installs QEMU, enables Hyper-V, sets up TAP and shares
+> - `start_vm.yml`: Scans `.qcow2` files, generates `.ps1` + `.bat` files for automatic startup
 
 ---
 
-## 📌 Requirements
+## ✅ Result
 
-- Ansible + Vagrant installed on the control VM
-- QEMU installed and in PATH on the Windows host
-- VMware Shared Folders enabled (`Z:\-vagrant\images`)
-- OpenVPN TAP adapter installed
-- Hyper-V features enabled (WHPX acceleration)
+- `.qcow2` disks are automatically discovered and used
+- PowerShell scripts are executed on GUI startup
+- QEMU boots all VMs with the defined configuration
+- All steps are fully automated via Ansible — no manual action needed on the Windows VM
