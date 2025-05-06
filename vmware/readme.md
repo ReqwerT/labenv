@@ -3,7 +3,7 @@
 Before using this project, make sure the following components are installed on your system:
 
 - **To install Vagrant**: [https://developer.hashicorp.com/vagrant/downloads](https://developer.hashicorp.com/vagrant/downloads)
-- **To install the Vagrant VMware plugin**: [https://developer.hashicorp.com/vagrant/docs/vmware](https://developer.hashicorp.com/vagrant/docs/vmware)
+- **To install the Vagrant VMware plugin**: [Install Vagrant VMware Utility0](https://github.com/ReqwerT/labenv/blob/main/tests/vmware.md)
 - **To install VMware Workstation (Pro or Player)**: [https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html](https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html)
 
 ---
