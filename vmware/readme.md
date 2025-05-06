@@ -67,7 +67,7 @@ Before using this project, make sure the following components are installed on y
 │   ├── start_vm.yml               # Playbook to prepare VM startup
 │   ├── qemu_install.yml           # Playbook to install QEMU and features
 │   └── hosts.ini                  # Ansible inventory
-├── win
+├── win11
 │   └── images
 │       ├── ubuntu.qcow2
 │       └── debian-10.qcow2
