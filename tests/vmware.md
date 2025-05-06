@@ -36,37 +36,20 @@ First, you need to download and add the HashiCorp GPG key to your system. Run th
 
 ---
 
-### 2. Download and Install VMware Utility 1.0.14
+### 2. Download and Install VMware Utility 1.0.24
 
-Download VMware utility from [here](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.24/).
+Download the `.deb` installer for the VMware Utility from the [official releases page](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.24/), or use the direct link below:
 
-Once the download is complete, install the utility using the following commands:
+- [vagrant-vmware-utility_1.0.24_amd64.deb](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.24/vagrant-vmware-utility_1.0.24_amd64.deb)
 
-- Create the necessary directory:
+Once downloaded, install it using the following command:
 
-  `sudo mkdir -p /opt/vagrant-vmware-desktop/bin`
+```bash
+sudo dpkg -i vagrant-vmware-utility_1.0.24_amd64.deb
+```
 
-- Unzip the downloaded file:
+> ✅ This installs the VMware Utility system-wide and prepares your environment for using the Vagrant VMware plugin.
 
-  `sudo unzip -d /opt/vagrant-vmware-desktop/bin vagrant-vmware-utility_1.0.0_linux_amd64.zip`
-
----
-
-### 3. Generate Certificates
-
-Once the installation is complete, you need to generate the required certificates. Run the following command:
-
-`sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility certificate generate`
-
-> The output of this command can be used to set the `utility_certificate_path` in the `Vagrantfile` if installing to a non-standard path.
-
----
-
-### 4. Install and Start the Service
-
-In the final step, use the following command to install and start the VMware utility service:
-
-`sudo /opt/vagrant-vmware-desktop/bin/vagrant-vmware-utility service install`
 
 ---
 
