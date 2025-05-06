@@ -13,8 +13,8 @@ Before using this project, make sure the following components are installed on y
 - **Vagrant version**: `2.4.5`
 - **VMware software**: `VMware Workstation Player`
 - **Vagrant boxes used**:
-  - `[gusztavvargadr/ubuntu-desktop-2204-lts](https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/ubuntu-desktop-2204-lts)` (for the Ansible control machine)
-  - `[gusztavvargadr/windows-11](https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-11)` (for the Windows QEMU host)
+  - [gusztavvargadr/ubuntu-desktop-2204-lts](https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/ubuntu-desktop-2204-lts) (for the Ansible control machine)
+  - [gusztavvargadr/windows-11](https://portal.cloud.hashicorp.com/vagrant/discover/gusztavvargadr/windows-11) (for the Windows QEMU host)
 - **QCOW2 disk images used in this project**:
   - [debian-10-openstack-amd64.qcow2](https://cdimage.debian.org/images/cloud/OpenStack/current-10/debian-10-openstack-amd64.qcow2)
   - [kali-linux-2025.1c-qemu-amd64.qcow2](https://cdimage.kali.org/kali-2025.1c/kali-linux-2025.1c-qemu-amd64.7z)
