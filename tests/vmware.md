@@ -38,7 +38,7 @@ First, you need to download and add the HashiCorp GPG key to your system. Run th
 
 ### 2. Download and Install VMware Utility 1.0.14
 
-Download VMware utility from [here](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.14/).
+Download VMware utility from [here](https://releases.hashicorp.com/vagrant-vmware-utility/1.0.24/).
 
 Once the download is complete, install the utility using the following commands:
 
