@@ -1,0 +1,25 @@
+Vagrant.configure("2") do |config|
+  # Use a Ubuntu Desktop 22.04 LTS base box
+  config.vm.box = "gusztavvargadr/ubuntu-desktop-2204-lts"
+  config.vm.hostname = "ubuntu-ansible-vm"
+
+  # Set a static IP address (for host-only networking)
+  config.vm.network "private_network", ip: "192.168.150.20"
+
+  # Share the current project directory with the VM at /vagrant
+  config.vm.synced_folder ".", "/vagrant"
+
+  # Share the Windows VM's images folder with the Ubuntu VM
+  config.vm.synced_folder "../win11/images", "/home/vagrant/shared_images"
+
+  # Configure VM hardware resources
+  config.vm.provider "vmware_desktop" do |v|
+    v.gui = false                   # Disable GUI for headless mode
+    v.linked_clone = false          # Use full clone for stability
+    v.vmx["memsize"] = "4096"       # Allocate 4 GB of RAM
+    v.vmx["numvcpus"] = "2"         # Allocate 2 CPU cores
+  end
+
+  # Run the provisioning shell script to install Ansible and run playbooks
+  config.vm.provision "shell", path: "scripts/req.sh"
+end
