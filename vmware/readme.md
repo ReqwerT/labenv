@@ -116,8 +116,8 @@ ansible-playbook -i scripts/hosts.ini scripts/start_vm.yml
 |-------------------------|--------|-----|-------|--------------|------------------|--------------------------------------|--------------------------------------------------------|
 | Virtual Windows 11      | 16 GB  | 4   | 125 GB | Yes          | 192.168.150.15   | QEMU host and Ansible target        | QEMU installed, Ansible access configured              |
 | Virtual Ubuntu (Ansible)| 4 GB   | 2   | 127 GB | -          | 192.168.150.20   | Ansible control node                | Connected to Windows host successfully via Ansible     |
-| Kali Linux inside Virtual Win11 | 4 GB   | 2   | QCOW2 | -          | DHCP (e.g., 10.0.2.15) | Test VM (launched via QEMU)       | Auto-start successful, network connectivity verified   |
-| Debian 10 inside Virtual Win11  | 4 GB   | 1   | QCOW2 | -          | DHCP (e.g., 10.0.2.16) | Test VM (launched via QEMU)       | Auto-start successful, basic functionality confirmed   |
+| Kali Linux inside Virtual Win11 | 4 GB   | 2   | QCOW2 | -          | DHCP (e.g., 10.0.2.15) | Test VM (launched via QEMU)       | Auto-start successful   |
+| Debian 10 inside Virtual Win11  | 4 GB   | 1   | QCOW2 | -          | DHCP (e.g., 10.0.2.16) | Test VM (launched via QEMU)       | Auto-start successful |
 ---
 
 
