@@ -109,6 +109,18 @@ ansible-playbook -i scripts/hosts.ini scripts/start_vm.yml
 
 ---
 
+---
+## 💻 Environment Matrix
+
+| System Name             | RAM    | CPU | Disk  | Nested Virt | IP Address       | Purpose                             | Result                                                |
+|-------------------------|--------|-----|-------|--------------|------------------|--------------------------------------|--------------------------------------------------------|
+| Virtual Windows 11      | 16 GB  | 4   | 80 GB | Yes          | 192.168.150.15   | QEMU host and Ansible target        | QEMU installed, Ansible access configured              |
+| Virtual Ubuntu (Ansible)| 4 GB   | 2   | 40 GB | Yes          | 192.168.150.20   | Ansible control node                | Connected to Windows host successfully via Ansible     |
+| Kali Linux inside Win11 | 2 GB   | 2   | QCOW2 | Yes          | DHCP (e.g., 10.0.2.15) | Test VM (launched via QEMU)       | Auto-start successful, network connectivity verified   |
+| Debian 10 inside Win11  | 1 GB   | 1   | QCOW2 | Yes          | DHCP (e.g., 10.0.2.16) | Test VM (launched via QEMU)       | Auto-start successful, basic functionality confirmed   |
+---
+
+
 ## ✅ Result
 
 - `.qcow2` disks are automatically discovered and used
