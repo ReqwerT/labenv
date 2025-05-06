@@ -1,4 +1,4 @@
-# 🧰 Ansible Automation Scripts (`ans/` Directory)
+# 🧰 Ansible Automation Scripts (`ans/scripts` Directory)
 
 This folder contains automation scripts to manage and configure a **Windows 11 virtual machine** using **Ansible**.  
 The **Ubuntu-based Ansible control machine** provisions the Windows VM to install **QEMU**, enable **virtualization features**, and configure **automatic virtual machine startup** using `.qcow2` disk images.
