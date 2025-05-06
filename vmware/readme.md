@@ -57,23 +57,23 @@ Before using this project, make sure the following components are installed on y
 - Install and configure QEMU, OpenVPN TAP, and Hyper-V features remotely
 
 ---
-
 ## 🖥️ Project Structure
 
 ```
 .
-├── Vagrantfile
-├── scripts
-│   ├── start_vm.yml               # Playbook to prepare VM startup
-│   ├── qemu_install.yml           # Playbook to install QEMU and features
-│   └── hosts.ini                  # Ansible inventory
+├── ans
+│   ├── Vagrantfile                     # Ansible control VM
+│   └── scripts
+│       ├── start_vm.yml               # Playbook to prepare VM startup
+│       ├── qemu_install.yml           # Playbook to install QEMU and features
+│       └── hosts.ini                  # Ansible inventory
 ├── win11
+│   ├── Vagrantfile                    # Windows 11 QEMU host
 │   └── images
-│       ├── ubuntu.qcow2
-│       └── debian-10.qcow2
-└── shared_images (→ mounted in Ansible VM as /home/vagrant/shared_images)
+│       ├── debian-10.qcow2
+│       └── kali-linux-2025.qcow2
+└── shared_images → Mounted in Ansible VM as /home/vagrant/shared_images
 ```
-
 ---
 
 ## ⚙️ How It Works
