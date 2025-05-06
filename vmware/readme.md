@@ -127,3 +127,34 @@ ansible-playbook -i scripts/hosts.ini scripts/start_vm.yml
 - PowerShell scripts are executed on GUI startup
 - QEMU boots all VMs with the defined configuration
 - All steps are fully automated via Ansible — no manual action needed on the Windows VM
+
+---
+
+## 🧾 Summary
+
+Using **Vagrant** with **VMware Workstation Player** on a bare metal Debian system, two virtual machines have been successfully provisioned. One of them is a **Windows 11 VM**, and the other is an **Ubuntu 22.04 VM** designated as the **Ansible control node**.
+
+- **Ubuntu VM IP**: `192.168.150.20`
+- **Windows VM IP**: `192.168.150.15`
+
+### Provisioning Steps:
+
+1. Navigate to the `win11` folder and run `vagrant up`. This will:
+   - Automatically download and import the Windows box (VMware Utility and Plugin must be installed beforehand).
+   - Enable Ansible WinRM access by downloading and executing `ConfigureRemotingForAnsible.ps1` from GitHub with administrator privileges.
+   - Assign the static IP `192.168.150.15` to the Windows VM.
+
+2. Next, go to the `ans` folder and run `vagrant up`. This launches the Ubuntu VM and:
+   - Installs Ansible automatically.
+   - Runs the `install_qemu.yml` playbook to:
+     - Download and silently install the latest version of QEMU.
+     - Enable Windows virtualization features: **Hyper-V**, **Virtual Machine Platform**, and **Hypervisor Platform**.
+
+3. Afterwards, the `start_vm.yml` playbook:
+   - Scans the `win11/images` directory for `.qcow2` disk files.
+   - Generates PowerShell (`.ps1`) and batch (`.bat`) files for each disk.
+   - Places these files in startup folders so QEMU VMs will automatically launch on Windows login.
+
+> ⚠️ **IMPORTANT**: Make sure to place your desired `.qcow2` images in the `win11/images` directory. The Ansible control node reads image filenames from this location and the Windows VM accesses the same directory via its Vagrant shared folder (e.g., `Z:\-vagrant\images\`).
+
+Finally, after restarting the virtual Windows 11 machine, all QEMU-based virtual machines boot automatically with no manual intervention required.
