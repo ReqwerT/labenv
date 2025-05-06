@@ -104,7 +104,7 @@ ansible-playbook -i scripts/hosts.ini scripts/qemu_install.yml
 ansible-playbook -i scripts/hosts.ini scripts/start_vm.yml
 ```
 
-> - `qemu_install.yml`: Installs QEMU, enables Hyper-V, sets up TAP and shares
+> - `qemu_install.yml`: Installs QEMU and enables Hyper-V
 > - `start_vm.yml`: Scans `.qcow2` files, generates `.ps1` + `.bat` files for automatic startup
 
 ---
