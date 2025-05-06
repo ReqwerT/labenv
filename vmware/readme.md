@@ -72,7 +72,6 @@ Before using this project, make sure the following components are installed on y
 │   └── images
 │       ├── debian-10.qcow2
 │       └── kali-linux-2025.qcow2
-└── shared_images → Mounted in Ansible VM as /home/vagrant/shared_images
 ```
 ---
 
