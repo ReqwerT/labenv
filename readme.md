@@ -1,33 +1,32 @@
-# Welcome to My Lab Envoriment
+# Welcome to My Lab Environment
 
 In this repo we will set up a test environment on a virtual machine base using three different providers.
 
-## Kullanılan Providerlar:
+## Using Providers:
   - **Libvirt**
   - **VMware**
   - **Hyper-V**
 
-## Gerekli Uygulama ve Eklentiler:
-  - Vagrant 2.4.5  
-  - Vagrant VMware Plugin  
-  - Vagrant Libvirt Plugin  
-  - Vagrant Hyper-V Plugin  
+## Required Applications and Plugins:
+    - Vagrant 2.4.5  
+    - Vagrant VMware Plugin  
+    - Vagrant Libvirt Plugin  
+    - Vagrant Hyper-V Plugin  
 
-## Kullanılan Fiziksel (Bare Metal) İşletim Sistemleri:
-  - Debian 10 KDE Plasma  
-  - Windows 10  
-  - Windows 11  
+## Using Bare Metal Operating Systems:
+    - Debian 10 KDE Plasma  
+    - Windows 10  
+    - Windows 11  
 
 ---
 
-## Test Ortamında Kullanılan Sanal Makineler
+## Virtual Machines Used in The Test Environment
 
 ###  Virtual Windows 11  
-  Bu sanal makine Ansible ile yönetilecek. Manuel müdahale olmadan, gerekli tüm uygulamalar kurulacak ve yapılandırmalar ansible sanal makinesi tarafından otomatik olarak yapılacak.
+  This virtual machine will be managed with Ansible. Without manual intervention, all necessary applications will be installed and configurations will be done automatically by the ansible virtual machine.
 
 ###  Virtual Linux for Ansible  
-  Bu sanal makine, Ansible kontrol düğümü (sidecar) olarak kullanılacak. Windows makinesine gerekli yazılımları yükleyip yapılandırmaları uzaktan gerçekleştirecek. Ayrıca istenirse OpenVPN TAP sunucusu da kurulabilir.
-
+  This virtual machine will be used as an Ansible control node (sidecar). It will install the necessary software on the Windows machine and perform the configurations remotely. Additionally, an OpenVPN TAP server can be installed if desired.
 ---
 
 ## Test İçin Hazırlıklar
