@@ -27,6 +27,7 @@ In this repo we will set up a test environment on a virtual machine base using t
 
 ###  Virtual Linux for Ansible  
   This virtual machine will be used as an Ansible control node (sidecar). It will install the necessary software on the Windows machine and perform the configurations remotely. Additionally, an OpenVPN TAP server can be installed if desired.
+
 ---
 
 ## Test İçin Hazırlıklar
