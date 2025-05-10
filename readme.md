@@ -37,8 +37,8 @@ In this repo we will set up a test environment on a virtual machine base using t
 
 `.qcow2` uzantılı disk imajlarını şu şekillerde temin edebilirsiniz:
 
-     - [qcow2 image creation guide](#)
-     - [Click to download ready qcow2 files](#)
+   - [qcow2 image creation guide](#)
+   - [Click to download ready qcow2 files](#)
 
 ---
 
