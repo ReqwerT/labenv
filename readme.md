@@ -89,9 +89,7 @@ vagrant-lab-environment/
 
 ---
 
-## Test Aşamalarına Erişmek İçin:
-
-- 🧪 Bare Metal Debian  
+## Bare Metal Debian  
 - 🧪 Bu testi VMware ile gerçekleştirmek için  
 - 🧪 Bu testi Hyper-V ile gerçekleştirmek için  
 - 🧪 Bu testi Libvirt ile gerçekleştirmek için  
