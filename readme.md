@@ -91,8 +91,8 @@ In this repo we will set up a test environment on a virtual machine base using t
 
 ---
 
-## Bare Metal Debian İçin Test Ortamını Sağlayan Sistemler
- 
-  -  VMware ile test gerçekleştirmek için tıklayın  
-  -  Hyper-V ile test gerçekleştirmek için tıklayın  
-  -  Libvirt ile test gerçekleştirmek için tıklayın
+## Systems Providing Test Environment for Bare Metal Debian
+
+  - Click to test with VMware
+  - Click to test with Hyper-V
+  - Click to test with Libvirt
