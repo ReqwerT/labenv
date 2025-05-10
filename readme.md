@@ -94,9 +94,8 @@ Bu repoda üç farklı provider kullanarak sanal makine tabanlı bir test ortam�
 
 ---
 
-## Test Ortamını Sağlayan Sistemler
-
-  -  Bare Metal Debian  
+## Bare Metal Debian İçin Test Ortamını Sağlayan Sistemler
+ 
   -  VMware ile test gerçekleştirmek için tıklayın  
   -  Hyper-V ile test gerçekleştirmek için tıklayın  
   -  Libvirt ile test gerçekleştirmek için tıklayın
