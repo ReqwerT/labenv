@@ -76,18 +76,18 @@ In this repo we will set up a test environment on a virtual machine base using t
 
   ---
 
-## Kurulum ve Çalıştırma Adımları
+## Installation and Run Steps
 
-  1.  Repoyu sisteminize klonlayın  
-  2.  `images/` klasörüne kullanmak istediğiniz `.qcow2` disk dosyalarını yerleştirin  
-  3.  `Win/` klasöründe terminal açın  
-  4.  `vagrant up` komutunu çalıştırın  
-     > *Gerekli Vagrant eklentileri yüklü değilse hata alırsınız. Gerekirse [buraya tıklayarak](#) yükleyin*  
-  5.  Windows sanal makinesi başlatılacak ve otomatik olarak yapılandırılacaktır  
-  6.  Ardından `Ans/` klasörüne geçin  
-  7.  `vagrant up` komutunu burada da çalıştırın  
-     > Bu adım, Ansible kontrol makinesini başlatır ve otomatik işlemleri tetikler  
-  8.  İşlem tamamlandığında, Windows sanal makinesi yeniden başlatılacak ve `.qcow2` disklerden sanal makineler otomatik olarak çalışacaktır  
+  1. Clone the repo to your system
+  2. Place the `.qcow2` disk files you want to use in the `images/` folder
+  3. Open a terminal in the `Win/` folder
+  4. Run the `vagrant up` command
+    > *You will get an error if the required Vagrant extensions are not installed. Install them if necessary by [clicking here](#)*
+  5. The Windows virtual machine will be started and automatically configured
+  6. Then move to the `Ans/` folder
+  7. Run the `vagrant up` command here as well
+     > This step will start the Ansible control machine and trigger automatic operations
+  8. Once the process is complete, the Windows virtual machine will be restarted and the virtual machines from the `.qcow2` disks will automatically run
 
 ---
 
