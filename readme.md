@@ -2,6 +2,13 @@
 
 In this repo we will set up a test environment on a virtual machine base using three different providers.
 
+## Goals:
+
+
+
+## Mission:
+
+
 ## Using Providers:
   - **Libvirt**
   - **VMware**
