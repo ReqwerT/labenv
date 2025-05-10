@@ -1,6 +1,6 @@
-# Lab Ortamına Hoş Geldiniz 
+# Welcome to My Lab Envoriment
 
-Bu repoda üç farklı provider kullanarak sanal makine tabanlı bir test ortamı kuracağız.
+    In this repo we will set up a test environment on a virtual machine base using three different providers.
 
 ## Kullanılan Providerlar:
   - **Libvirt**
