@@ -70,7 +70,7 @@ In this repo we will set up a test environment on a virtual machine base using t
   - `scripts/req.sh`: Automatically runs with `vagrant up`, installs Ansible and triggers other steps.
   - `install_qemu.yml`: Installs QEMU and necessary virtualization features on the target (Windows) machine.
   - `create_startup_qemu_file.yml`: Creates automatic `.bat` files for each disk in the `images/` folder and adds them to the Windows startup. Thus, the relevant virtual machines are automatically started every time Windows is started.
-  - `Win/` klasörü Windows sanal makinesini başlatmak için gereken `Vagrantfile`’ı içerir. Bu dosya:
+  - The `Win/` folder contains the `Vagrantfile` needed to start the Windows virtual machine. This file:
      - Assigns a static IP address,
      - Enables the WinRM service and makes it manageable with Ansible.
 
