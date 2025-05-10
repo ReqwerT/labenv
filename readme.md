@@ -41,22 +41,27 @@ Kendi `.qcow2` uzantılı image dosyanızı oluşturabilir, internetten bu `.qco
 
 ---
 
-## Klasör Yapısı
-- vagrant-lab-environment/
-  - images/
-    - kali.qcow2  
-    - Windows.qcow2  
-    - manjaro.qcow2  
-  - Ans/
-    - Vagrantfile  
-    - scripts/
-      - req.sh  
-      - install_qemu.yml  
-      - create_startup_qemu_file.yml  
-      - hosts.ini  
-  - Win/
-    - Vagrantfile  
-  - README.md
+## 📁 Klasör Yapısı
+
+```
+vagrant-lab-environment/
+├── images/
+│   ├── kali.qcow2
+│   ├── Windows.qcow2
+│   └── manjaro.qcow2
+├── Ans/
+│   ├── Vagrantfile
+│   └── scripts/
+│       ├── req.sh
+│       ├── install_qemu.yml
+│       ├── create_startup_qemu_file.yml
+│       └── hosts.ini
+├── Win/
+│   └── Vagrantfile
+└── README.md
+```
+
+
 - `images` klasörü altında, bizim Windows sanal makinesi üzerinden başlatacağımız sanal makinelerin `.qcow2` uzantılı dosyaları bulunuyor. Bu klasöre, 2 sanal makinemizden de Vagrant dosya paylaşımı özelliği kullanarak bağlantı sağlayabileceğiz. Detaylara birazdan bakacağız.
 
 - `Ans` klasörü altında, `Vagrantfile` dosyamız ve `scripts` klasörümüz bulunuyor. `scripts` klasörü içerisinde `req.sh`, `install_qemu.yml`, `create_startup_qemu_file.yml` dosyalarımız mevcut.
