@@ -82,7 +82,7 @@ In this repo we will set up a test environment on a virtual machine base using t
   2. Place the `.qcow2` disk files you want to use in the `images/` folder
   3. Open a terminal in the `Win/` folder
   4. Run the `vagrant up` command
-    > *You will get an error if the required Vagrant extensions are not installed. Install them if necessary by [clicking here](#)*
+     > *You will get an error if the required Vagrant extensions are not installed. Install them if necessary by [clicking here](#)*
   5. The Windows virtual machine will be started and automatically configured
   6. Then move to the `Ans/` folder
   7. Run the `vagrant up` command here as well
