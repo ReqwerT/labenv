@@ -1,6 +1,6 @@
 # Welcome to My Lab Envoriment
 
-    In this repo we will set up a test environment on a virtual machine base using three different providers.
+In this repo we will set up a test environment on a virtual machine base using three different providers.
 
 ## Kullanılan Providerlar:
   - **Libvirt**
