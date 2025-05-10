@@ -30,20 +30,19 @@ In this repo we will set up a test environment on a virtual machine base using t
 
 ---
 
-## Test İçin Hazırlıklar
+## Preparations for the Test
+  In order for the test scenario to work, some virtual disk images in `.qcow2` format are needed. With these images, operations can be performed quickly on ready systems. Since the purpose of the tests is not installation, but configuration and automation, installed machines were preferred.
 
-  Test senaryosunun çalışabilmesi için `.qcow2` formatında bazı sanal disk imajlarına ihtiyaç duyulmaktadır. Bu imajlar sayesinde hazır sistemler üzerinden hızlıca işlem yapılabilir. Testlerin amacı kurulum değil, yapılandırma ve otomatikleştirme olduğundan, kurulu makineler tercih edilmiştir.
-
-  Bu sayede zaman kaybı önlenir ve gerçek sistemlere zarar verme riski ortadan kalkar, çünkü disk bölümlendirme işlemleri sanal ortamda yapılır.
+  In this way, time loss is prevented and the risk of damaging real systems is eliminated, because disk partitioning operations are performed in a virtual environment.
 
 `.qcow2` uzantılı disk imajlarını şu şekillerde temin edebilirsiniz:
 
-  -  [qcow2 image oluşturma rehberi](#)
-  -  [Hazır qcow2 dosyalarını indirmek için tıklayın](#)
+     - [qcow2 image creation guide](#)
+     - [Click to download ready qcow2 files](#)
 
 ---
 
-##  Klasör Yapısı
+##  Folder Structure
 
     ```
     vagrant-lab-environment/
@@ -63,20 +62,18 @@ In this repo we will set up a test environment on a virtual machine base using t
     └── README.md
     ```
 
-### Açıklamalar:
-
-  - `images/` klasörü, Windows sanal makinesi üzerinden başlatılacak sanal makinelerin `.qcow2` uzantılı disk dosyalarını içerir. Hem Windows hem de Linux sanal makineleri bu klasöre dosya paylaşımı yoluyla erişebilir.
+### Remarks:
+  - The `images/` folder contains the disk files with the `.qcow2` extension of the virtual machines that will be launched via the Windows virtual machine. Both Windows and Linux virtual machines can access this folder via file sharing.
   
-  - `Ans/` klasörü Ansible kontrol makinesine ait dosyaları içerir:
-    - `Vagrantfile`: Ubuntu tabanlı sanal makineyi başlatır.
-    - `scripts/req.sh`: `vagrant up` ile otomatik çalışır, Ansible kurulumu yapar ve diğer adımları tetikler.
-    - `install_qemu.yml`: Hedef (Windows) makineye QEMU ve gerekli sanallaştırma özelliklerini yükler.
-    - `create_startup_qemu_file.yml`: `images/` klasöründeki her disk için otomatik `.bat` dosyaları oluşturur ve Windows’un başlangıcına ekler. Böylece Windows her açıldığında ilgili sanal makineler de otomatik başlatılır.
-  
+  - The `Ans/` folder contains the files belonging to the Ansible control machine:
+  - `Vagrantfile`: Starts the Ubuntu-based virtual machine.
+  - `scripts/req.sh`: Automatically runs with `vagrant up`, installs Ansible and triggers other steps.
+  - `install_qemu.yml`: Installs QEMU and necessary virtualization features on the target (Windows) machine.
+  - `create_startup_qemu_file.yml`: Creates automatic `.bat` files for each disk in the `images/` folder and adds them to the Windows startup. Thus, the relevant virtual machines are automatically started every time Windows is started.
   - `Win/` klasörü Windows sanal makinesini başlatmak için gereken `Vagrantfile`’ı içerir. Bu dosya:
-    - Statik IP adresi atar,
-    - WinRM servisini etkinleştirerek Ansible ile yönetilebilir hale getirir.
-  
+     - Assigns a static IP address,
+     - Enables the WinRM service and makes it manageable with Ansible.
+
   ---
 
 ## Kurulum ve Çalıştırma Adımları
