@@ -101,5 +101,5 @@ In this repo we will set up a test environment on a virtual machine base using t
 ## Systems Providing Test Environment for Bare Metal Debian
 
   - [Click to test with VMware](https://github.com/ReqwerT/labenv/tree/main/vmware)
-  - Click to test with Hyper-V
+  - [Click to test with Hyper-V](https://github.com/ReqwerT/labenv/tree/main/hyperv)
   - Click to test with Libvirt
