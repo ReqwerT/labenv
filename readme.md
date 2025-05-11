@@ -3,7 +3,7 @@
 In this repo we will set up a test environment on a virtual machine base using three different providers.
 
 ## Goals:
-
+Our main goal is to perform some tests safely without damaging our real system. That's why we set up a virtual environment. We perform these tests on virtual machines so that operations such as disk partitioning do not harm the computer. We also perform all operations automatically to prevent time loss.
 
 
 ## Mission:
