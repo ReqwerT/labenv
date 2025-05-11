@@ -15,7 +15,7 @@ In this repo we will set up a test environment on a virtual machine base using t
   - [**Hyper-V**](https://github.com/ReqwerT/labenv/tree/main/hyperv)
 
 ## Required Applications and Plugins:
-    - Vagrant 2.4.5  
+    - **Vagrant 2.4.5**
     - Vagrant VMware Plugin  
     - Vagrant Libvirt Plugin  
     - Vagrant Hyper-V Plugin  
