@@ -105,4 +105,4 @@ In this repo we will set up a test environment on a virtual machine base using t
 
 ---
 ## All Test Logs
-  - Click to show test logs
+  - [Click to show all test logs](https://github.com/ReqwerT/labenv/blob/main/tests/baremetaldebian.md)
