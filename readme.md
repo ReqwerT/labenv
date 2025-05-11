@@ -52,7 +52,7 @@ Every time our virtual Windows machine boots up, it will automatically start ano
 
 ##  Folder Structure
 
-    ```
+  
     vagrant-lab-environment/
     ├── images/
     │   ├── kali.qcow2
@@ -68,7 +68,7 @@ Every time our virtual Windows machine boots up, it will automatically start ano
     ├── Win/
     │   └── Vagrantfile
     └── README.md
-    ```
+    
 
 ### Remarks:
   - The `images/` folder contains the disk files with the `.qcow2` extension of the virtual machines that will be launched via the Windows virtual machine. Both Windows and Linux virtual machines can access this folder via file sharing.
