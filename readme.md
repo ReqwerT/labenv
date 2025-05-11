@@ -22,9 +22,9 @@ Every time our virtual Windows machine boots up, it will automatically start ano
   - Vagrant Hyper-V Plugin  
 
 ## Using Bare Metal Operating Systems:
-    - Debian 10 KDE Plasma  
-    - Windows 10  
-    - Windows 11  
+  - Debian 10 KDE Plasma  
+  - Windows 10  
+  - Windows 11  
 
 ---
 
