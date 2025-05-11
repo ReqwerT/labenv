@@ -102,4 +102,4 @@ In this repo we will set up a test environment on a virtual machine base using t
 
   - [Click to test with VMware](https://github.com/ReqwerT/labenv/tree/main/vmware)
   - [Click to test with Hyper-V](https://github.com/ReqwerT/labenv/tree/main/hyperv)
-  - Click to test with Libvirt
+  - [Click to test with Libvirt](https://github.com/ReqwerT/labenv/tree/main/libvirt)
