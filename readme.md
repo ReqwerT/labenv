@@ -7,6 +7,7 @@ Our main goal is to perform some tests safely without damaging our real system. 
 
 
 ## Mission:
+Every time our virtual Windows machine boots up, it will automatically start another virtual machine using QEMU with WHPX acceleration. It will then access the shared folder at C:\Users\vagrant\sf.
 
 
 ## Using Providers:
