@@ -97,9 +97,12 @@ In this repo we will set up a test environment on a virtual machine base using t
   8. Once the process is complete, the Windows virtual machine will be restarted and the virtual machines from the `.qcow2` disks will automatically run
 
 ---
-
 ## Systems Providing Test Environment for Bare Metal Debian
 
   - [Click to test with VMware](https://github.com/ReqwerT/labenv/tree/main/vmware)
   - [Click to test with Hyper-V](https://github.com/ReqwerT/labenv/tree/main/hyperv)
   - [Click to test with Libvirt](https://github.com/ReqwerT/labenv/tree/main/libvirt)
+
+---
+## All Test Logs
+  - Click to show test logs
