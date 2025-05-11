@@ -16,10 +16,10 @@ Every time our virtual Windows machine boots up, it will automatically start ano
   - [**Hyper-V**](https://github.com/ReqwerT/labenv/tree/main/hyperv)
 
 ## Required Applications and Plugins:
-    - **Vagrant 2.4.5**
-    - Vagrant VMware Plugin  
-    - Vagrant Libvirt Plugin  
-    - Vagrant Hyper-V Plugin  
+  - Vagrant 2.4.5
+  - Vagrant VMware Plugin  
+  - Vagrant Libvirt Plugin  
+  - Vagrant Hyper-V Plugin  
 
 ## Using Bare Metal Operating Systems:
     - Debian 10 KDE Plasma  
