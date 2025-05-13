@@ -1,0 +1,33 @@
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "tonyclemmey/windows11"
+
+
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "private_network", ip: "192.168.121.15"
+
+
+    config.vm.synced_folder "/home/reqwert/Desktop/vagrant-vmware/win11/images", "C:/users/vagrant/shared_f", type: "rsync", disabled: false
+
+  # rsync senkronizasyonunu 'vagrant up' sonrasında tetiklemek için
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "Paylaşımlı klasör rsync sonrası hazır."
+  SHELL
+
+  config.vm.provision "shell", privileged: true, inline: <<-SHELL
+    $url = "https://raw.githubusercontent.com/ansible/ansible-documentation/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+    $file = "C:\\Windows\\Temp\\ConfigureRemotingForAnsible.ps1"
+    Invoke-WebRequest -Uri $url -OutFile $file
+    powershell.exe -ExecutionPolicy Bypass -File $file
+  SHELL
+
+
+  config.vm.synced_folder "/home/reqwert/Desktop/vagrant-vmware/win11/images/", "/home/vagrant/shared_images"
+  config.vm.provider "libvirt" do |v|
+
+    v.memory = "16384"
+    v.cpus = "4"
+  end
+
+end
