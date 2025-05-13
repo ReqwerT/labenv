@@ -1,27 +1,29 @@
-## Vagrant + Libvirt Test Ortamı
+## Vagrant + Libvirt Test Environment
 
-Bu proje, **bare-metal Debian** üzerinde **Vagrant** ve **libvirt/qemu-kvm** kullanarak otomatik sanal makine kurulum ve yapılandırma işlemlerini gerçekleştirir.
+This project performs automatic virtual machine setup and configuration using **Vagrant** and **libvirt/qemu-kvm** on **bare-metal Debian**.
 
-## Gereksinimler:
 
-Başlamadan önce, bilgisayarımızı hazırlamak için buraya tıklayın:
 
-## Amaç
+## Requirements:
 
-İki sanal makine oluşturacağız:
+Before we begin, click here to prepare our computer:
 
-- **Windows 11** VM (ana hedef)
-- **Ubuntu 22.04 (Ansible kontrol birimi - sidecar)**
+## Goal/Mission:
 
-Ana hedef, Windows 11 sanal makinesinin her açılışında, içinde WHPX ile hızlandırılmış başka sanal makinelerin otomatik olarak başlatılmasını sağlayacak.
+We will create two virtual machines:
 
-## Sidecar Nedir?
+- **Windows 11** VM (main target)
+- **Ubuntu 22.04 (Ansible controller - sidecar)**
 
-"Sidecar", esas birimin yanında çalışan ve onu destekleyen yardımcı kontrol birimi anlamına gelir. Burada Ubuntu 22.04 Ansible VM, Windows makinemizi uzaktan yönetmek için bir sidecar görevi görmektedir.
+The main target will ensure that every time a Windows 11 virtual machine boots up, other virtual machines accelerated with WHPX will be automatically started inside it.
+
+## Neden Bunu Yapıyoruz?
+
+## What is Sidecar?
+
+"Sidecar" means a slave controller that runs alongside and supports the main unit. Here, the Ubuntu 22.04 Ansible VM acts as a sidecar to remotely manage our Windows machine.
 
 ---
-
-## Yapılandırma Akışı
 
 ### Windows 11 Sanal Makinesi:
 
