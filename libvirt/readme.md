@@ -60,7 +60,7 @@ The main target will ensure that every time a Windows 11 virtual machine boots u
 
 ## Application Steps
 
-1. First, let's place our disks with the extension `.qcow2` in the `images/` folder.
+1. First, let's place our disks with the extension `.qcow2` in the `images/` folder. (example: [click to](https://cdimage.kali.org/kali-2025.1c/kali-linux-2025.1c-qemu-amd64.7z) download kali qcow2 image file )
 
 2. Then let's go to the `win11/` directory via terminal:
 
