@@ -1,0 +1,67 @@
+ libvirt download: https://libvirt.org/downloads.html
+ https://www.linuxtechi.com/how-to-install-kvm-on-debian/
+
+
+ 1) Check Whether Virtualization Extension is enabled or not
+    grep -E -c '(vmx|svm)' /proc/cpuinfo
+ 2) Install kvm
+    sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon virt-manager -y
+    sudo systemctl status libvirtd
+ 3) Start default network and add vhost_net module
+    sudo virsh net-list --all
+    sudo virsh net-start default
+    sudo virsh net-autostart default
+    sudo modprobe vhost_net
+    echo "vhost_net" | sudo tee -a /etc/modules vhost_net
+    lsmod | grep vhost
+
+
+    Note: If you want your local user to use virsh commands then add that user to libvirt and libvirt-qemu group using the following commands
+        $ sudo adduser $USER libvirt
+        $ sudo adduser $USER libvirt-qemu
+  4) Create Network Bridge(br0) for KVM VMs
+        $ sudo apt install -y resolvconf
+        $ sudo nano /etc/network/interfaces
+            source /etc/network/interfaces.d/*
+            # The loopback network interface
+            auto lo
+            iface lo inet loopback
+
+            #Primary network interface(ens33)
+            auto enp0s3
+            iface enp0s3 inet manual
+
+            #Configure bridge and give it a static ip
+            auto br0
+            iface br0 inet static
+            address 192.168.1.27
+            netmask 255.255.255.0
+            gateway 192.168.1.1
+            bridge_ports enp0s3
+            bridge_hw 08:00:27:9c:10:06
+            bridge_stp off
+            bridge_fd 0
+            bridge_maxwait 0
+            dns-nameservers 8.8.8.8 4.2.2.2
+
+        $ sudo systemctl restart networking
+        $ ip add show
+            8: br0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+            link/ether 08:00:27:9c:10:06 brd ff:ff:ff:ff:ff:ff
+            inet 192.168.1.27/24 brd 192.168.1.255 scope global br0
+            valid_lft forever preferred_lft forever
+
+    5) Install vagrant libvirt utility
+        https://github.com/vagrant-libvirt/vagrant-libvirt/pkgs/rubygems/vagrant-libvirt/125854293
+
+        öncelikle ;
+        sudo apt install -y vagrant ruby ruby-dev gcc libz-dev libvirt-dev
+        ile ruby kurulmalı. ARdından
+        gem install vagrant-libvirt
+        vagrant plugin install vagrant-libvirt
+komutu ile vagrant-libvirt plugin kurulmalı.
+
+
+
+Kullanılan windows box:
+https://portal.cloud.hashicorp.com/vagrant/discover/stromweld/windows-10
