@@ -25,93 +25,101 @@ The main target will ensure that every time a Windows 11 virtual machine boots u
 
 ---
 
-### Windows 11 Sanal Makinesi:
+### Windows 11 Virtual Machine:
 
-- Statik IP: `192.168.121.15`
-- İlk açılışta, aşağıdaki PowerShell betiğini otomatik indiriyor ve otomatik olarak çalıştırıyor:  
-  [`ConfigureRemotingForAnsible.ps1`](https://raw.githubusercontent.com/ansible/ansible-documentation/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
-- Böylece, uzaktan Ansible ile yönetilebilir hâle gelir.
+- Static IP: `192.168.121.15`
+- On first boot, it automatically downloads and automatically runs the following PowerShell script: 
+[`ConfigureRemotingForAnsible.ps1`](https://raw.githubusercontent.com/ansible/ansible-documentation/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
+- Thus, it can be managed remotely with Ansible.
 
 ### Ubuntu Ansible Sidecar VM:
 
-- Başlangıçta `req.sh` betiği ile gerekli paketleri yüklüyor.
-- `hosts.ini` dosyasındaki hedef Windows IP’sine göre işlem yapıyor.
-- Ardından şu Ansible playbook'lar çalıştırılıyor:
+- On startup, it installs the necessary packages with the `req.sh` script.
+- It acts according to the target Windows IP in the `hosts.ini` file.
+- Then, the following Ansible playbooks are run:
 
 #### install_qemu.yml
 
-- Hedef makineye sessizce QEMU indirir ve yükler.
-- Hedef makinede, gerekli sanallaştırma özelliklerini aktif eder.
-- QEMU için Sistem PATH ayarlanır.
-- En sonunda sistemi yeniden başlatır.
+- Silently downloads and installs QEMU on the target machine.
+- Activates the necessary virtualization features on the target machine.
 
-####  start_vm.yml
+- Sets the System PATH for QEMU.
 
-- `images/` dizinindeki tüm `.qcow2` disk dosyalarını, isimlerini öğrenmek için tarıyor.
-- Her biri için ismi ile birlikte `.ps1` başlatıcı script'leri hazırlıyor.
-- Bunları çağıran `.bat` dosyaları oluşturuyor.
-- Otomatik olarak Windows başlangıç klasörüne ekleniyor ve bu sayede windows her açıldığında, bu sanal makineler de çalışıyor.
+- Finally, restarts the system.
+
+#### start_vm.yml
+
+- Scans all `.qcow2` disk files in the `images/` directory to learn their names.
+
+- Prepares `.ps1` launcher scripts with their names for each one.
+
+- Creates `.bat` files that call them.
+
+- Automatically added to the Windows startup folder, so that these virtual machines run every time Windows starts.
+---
+
+## Application Steps
+
+1. First, let's place our disks with the extension `.qcow2` in the `images/` folder.
+
+2. Then let's go to the `win11/` directory via terminal:
+
+```bash
+cd win11
+vagrant up
+```
+
+3. When the Windows machine starts, the necessary environment for Ansible is automatically prepared.
+
+4. Then let's go to the `ansible/` directory:
+
+```
+bash
+cd ../ansible
+vagrant up
+```
+
+5. While the Ansible machine is starting:
+- WinRM and ansible are automatically installed,
+- QEMU is installed and configured on our target machine,
+- WHPX is enabled on our target machine,
+- Windows is restarted,
+- Then WHPX-supported virtual machines start automatically.
 
 ---
 
-## Uygulama Adımları
+## Vagrant Boxes Used
 
-1. Öncelikle `images/` klasörüne `.qcow2` uzantılı disklerimizi yerleştirelim.
-2. Ardından `win11/` dizinine terminal üzerinden gidelim:
-
-   ```bash
-   cd win11
-   vagrant up
-   ```
-
-3. Windows makinesi açıldığında, Ansible için gerekli ortam otomatik hazırlanmış oluyor.
-4. Daha sonra `ansible/` dizinine geçelim:
-
-   ```bash
-   cd ../ansible
-   vagrant up
-   ```
-
-5. Ansible makinesi açılırken:
-   - WinRM ve ansible otomatik olarak kurulur,
-   - Hedef makinemiz üzerinde QEMU’yu kuruyor ve yapılandırıyor,
-   - Hedef makinemizde WHPX etkinleştiriyor,
-   - Windows’u yeniden başlatıyor,
-   - Ardından WHPX destekli sanal makineler otomatik olarak başlıyor.
----
-
-## Kullanılan Vagrant Box'lar
-
-| VM Rolü      | Vagrant Box                 |
-|--------------|-----------------------------|
-| Ansible VM   | [generic-x64/ubuntu2204](https://portal.cloud.hashicorp.com/vagrant/discover/generic-x64/ubuntu2204)   |
-| Windows VM   | [tonyclemmey/windows11](https://portal.cloud.hashicorp.com/vagrant/discover/tonyclemmey/windows11)    |
+| VM Role | Vagrant Box |
+|--------------|--------------------------|
+| Ansible VM | [generic-x64/ubuntu2204](https://portal.cloud.hashicorp.com/vagrant/discover/generic-x64/ubuntu2204) |
+| Windows VM | [tonyclemmey/windows11](https://portal.cloud.hashicorp.com/vagrant/discover/tonyclemmey/windows11) |
 
 ---
 
-## QEMU Sanal Makinelerinin Özellikleri
+## Features of QEMU Virtual Machines
 
-İşin sonunda, otomatik olarak oluşturduğumuz betik dosyaları, Windows 11 VM içerisinde, aşağıdaki komutla QEMU sanal makineleri çalıştırılır:
+At the end of the job, the script files we created automatically are run in Windows 11 VM with the following command:
 
 ```powershell
 qemu-system-x86_64 `
-    -accel whpx `
-    -m 4096 `
-    -drive file="C:\Users\vagrant\shared_f\{{ item }}",format=qcow2,if=virtio `
-    -netdev user,id=net0 `
-    -device virtio-net,netdev=net0 `
-    -boot c
+-accel whpx `
+
+-m 4096 `
+-drive file="C:\Users\vagrant\shared_f\{{ item }}",format=qcow2,if=virtio `
+-netdev user,id=net0 `
+-device virtio-net,netdev=net0 `
+-boot c
 ```
 
-Bu komut, her `.qcow2` dosyası için otomatik hazırlanır ve Windows başlangıcında çalışacak şekilde ayarlanır.
+This command is automatically prepared for each `.qcow2` file and is set to run at Windows startup.
 
 ---
 
-## Sonuç
+## Result
 
-Bu yapı sayesinde:
+Thanks to this structure:
 
-- Vagrant ile iki sanal makine otomatik olarak kurulumu yapmış olduk .
-- Windows makinesi, uzaktan yönetim için otomatik biçimde ayarlanmış oldu.
-- WHPX destekli QEMU makineleri, Sanal Windows her açıldığında otomatik başlattık ve testi başarılı biçimde gerçekleştirdik.
-
+- We have automatically installed two virtual machines with Vagrant.
+- The Windows machine has been automatically set up for remote management.
+- We automatically started the WHPX-supported QEMU machines every time Virtual Windows was opened and successfully completed the test.
