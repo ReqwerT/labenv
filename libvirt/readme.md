@@ -2,6 +2,10 @@
 
 Bu proje, **bare-metal Debian** üzerinde **Vagrant** ve **libvirt/qemu-kvm** kullanarak otomatik sanal makine kurulum ve yapılandırma işlemlerini gerçekleştirir.
 
+## Gereksinimler:
+
+Başlamadan önce, bilgisayarımızı hazırlamak için buraya tıklayın:
+
 ## Amaç
 
 İki sanal makine oluşturacağız:
