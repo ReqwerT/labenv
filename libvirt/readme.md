@@ -78,14 +78,14 @@ Ana hedef, Windows 11 sanal makinesinin her açılışında, içinde WHPX ile h�
 
 | VM Rolü      | Vagrant Box                 |
 |--------------|-----------------------------|
-| Ansible VM   | `[generic-x64/ubuntu2204](https://portal.cloud.hashicorp.com/vagrant/discover/generic-x64/ubuntu2204)`    |
-| Windows VM   | `[tonyclemmey/windows11](https://portal.cloud.hashicorp.com/vagrant/discover/tonyclemmey/windows11)`     |
+| Ansible VM   | [generic-x64/ubuntu2204](https://portal.cloud.hashicorp.com/vagrant/discover/generic-x64/ubuntu2204)   |
+| Windows VM   | [tonyclemmey/windows11](https://portal.cloud.hashicorp.com/vagrant/discover/tonyclemmey/windows11)    |
 
 ---
 
 ## QEMU Sanal Makinelerinin Özellikleri
 
-Windows 11 VM içerisinde, aşağıdaki komutla QEMU sanal makineleri çalıştırılır:
+İşin sonunda, otomatik olarak oluşturduğumuz betik dosyaları, Windows 11 VM içerisinde, aşağıdaki komutla QEMU sanal makineleri çalıştırılır:
 
 ```powershell
 qemu-system-x86_64 `
@@ -105,7 +105,7 @@ Bu komut, her `.qcow2` dosyası için otomatik hazırlanır ve Windows başlang�
 
 Bu yapı sayesinde:
 
-- Vagrant ile iki sanal makine otomatik olarak kuruldu .
-- Windows makinesi, uzaktan yönetim için hazırlandı.
-- WHPX destekli QEMU makineleri, Sanal Windows her açıldığında otomatik başlatıyor.
+- Vagrant ile iki sanal makine otomatik olarak kurulumu yapmış olduk .
+- Windows makinesi, uzaktan yönetim için otomatik biçimde ayarlanmış oldu.
+- WHPX destekli QEMU makineleri, Sanal Windows her açıldığında otomatik başlattık ve testi başarılı biçimde gerçekleştirdik.
 
