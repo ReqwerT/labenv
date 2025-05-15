@@ -17,8 +17,6 @@ We will create two virtual machines:
 
 The main target will ensure that every time a Windows 11 virtual machine boots up, other virtual machines accelerated with WHPX will be automatically started inside it.
 
-## Neden Bunu Yapıyoruz?
-
 ## What is Sidecar?
 
 "Sidecar" means a slave controller that runs alongside and supports the main unit. Here, the Ubuntu 22.04 Ansible VM acts as a sidecar to remotely manage our Windows machine.
