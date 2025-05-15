@@ -1,14 +1,14 @@
-## .qcow2 Image Dosyası Paylaşımı
+## .qcow2 Image File Sharing
 
-Bu klasöre, açmak istediğiniz `.qcow2` uzantılı image dosyalarınızı yüklemeniz gerekiyor.
+You need to upload the `.qcow2` extension image files that you want to open to this folder.
 
-Ansible makinemiz, bu klasöre erişim sağlayarak dosya adını okuyacak ve bu dosya adı ile bir script oluşturup, **Windows sanal makinemizde otomatik açılış** sağlayacak.
+Our Ansible machine will access this folder, read the file name and create a script with this file name, and provide **automatic opening** in our Windows virtual machine.
 
-> Klasör senkronizasyonu, `Vagrantfile` dosyamızda, aşağıdaki komut ile sağlanıyor.:
+> Folder synchronization is provided in our `Vagrantfile` file with the following command:
 
 ```ruby
- config.vm.synced_folder File.expand_path("../images", __dir__), "/home/vagrant/shared_images", type: "rsync"
+config.vm.synced_folder File.expand_path("../images", __dir__), "/home/vagrant/shared_images", type: "rsync"
 
 ```
 
-Bu sayede `../images` klasörümüz, Ansible makinemizde `/home/vagrant/shared_images` klasöründe görünüyor.
+This way, our `../images` folder appears in the `/home/vagrant/shared_images` folder on our Ansible machine.
