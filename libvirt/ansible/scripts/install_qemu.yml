@@ -1,38 +1,30 @@
 ---
-# Playbook name: Installs QEMU on Windows and enables virtualization features
 - name: Install QEMU and enable virtualization on Windows
   hosts: win
   tasks:
-
-    # Download the QEMU installer to the current user's Downloads folder
     - name: Download QEMU installer
       win_get_url:
-        url: "https://qemu.weilnetz.de/w64/2025/qemu-w64-setup-20250210.exe"
+        url: "https://qemu.weilnetz.de/w64/qemu-w64-setup-20250422.exe"
         dest: "C:\\Users\\{{ ansible_user | quote }}\\Downloads\\qemu_installer.exe"
 
-    # Silently install QEMU if not already installed
     - name: Install QEMU
       win_command: "C:\\Users\\{{ ansible_user | quote }}\\Downloads\\qemu_installer.exe /S"
       args:
         creates: "C:\\Program Files\\qemu"
 
-    # Add the QEMU installation directory to the system PATH
     - name: Add QEMU to PATH
       win_path:
         elements:
           - "C:\\Program Files\\qemu"
 
-    # Enable the full Hyper-V feature (required for WHPX)
     - name: Enable Hyper-V feature
       win_shell: |
         Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All -NoRestart -All
 
-    # Enable the Hypervisor Platform (enables use of hypervisor APIs like WHPX)
     - name: Enable Hypervisor Platform
       win_shell: |
         Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -NoRestart -All
 
-    # Enable the Virtual Machine Platform (required for advanced virtualization scenarios)
     - name: Enable Virtual Machine Platform
       win_shell: |
         Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -NoRestart -All
