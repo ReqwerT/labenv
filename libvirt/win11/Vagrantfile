@@ -21,8 +21,6 @@ Vagrant.configure("2") do |config|
     powershell.exe -ExecutionPolicy Bypass -File $file
   SHELL
 
-
-  config.vm.synced_folder "/home/reqwert/Desktop/vagrant-vmware/win11/images/", "/home/vagrant/shared_images"
   config.vm.provider "libvirt" do |v|
 
     v.memory = "16384"
