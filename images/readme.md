@@ -11,4 +11,4 @@ Ansible makinemiz, bu klasöre erişim sağlayarak dosya adını okuyacak ve bu 
 
 ```
 
-Bu sayede `../images` klasörünüz, Windows makinenizde `C:/users/vagrant/shared_f` olarak görünecektir.
+Bu sayede `../images` klasörümüz, Ansible makinemizde `/home/vagrant/shared_images` klasöründe görünüyor.
