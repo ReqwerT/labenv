@@ -4,7 +4,7 @@
 
 Öncelikle Vagrant 2.4.5 sürümünü bare metal Debian’a indirelim:
 
-Buradaki (https://developer.hashicorp.com/vagrant/install) linkten doğrudan siteye erişebilir veya aşağıdaki komutları terminale yazarak Vagrant kurma adımlarını sağlayabiliriz:
+[Buradaki](https://developer.hashicorp.com/vagrant/install) linkten doğrudan siteye erişebilir veya aşağıdaki komutları terminale yazarak Vagrant kurma adımlarını sağlayabiliriz:
 
 ```bash
 wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
