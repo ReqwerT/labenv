@@ -66,7 +66,7 @@ The main target will ensure that every time a Windows 11 virtual machine boots u
 
 ```bash
 cd win11
-vagrant up
+vagrant up --provider=libvirt
 ```
 
 3. When the Windows machine starts, the necessary environment for Ansible is automatically prepared.
@@ -76,7 +76,7 @@ vagrant up
 ```
 bash
 cd ../ansible
-vagrant up
+vagrant up --provider=libvirt
 ```
 
 5. While the Ansible machine is starting:
