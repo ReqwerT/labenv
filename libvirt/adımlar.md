@@ -25,6 +25,7 @@ We can download and install libvirt with the following commands:
 ```bash
 grep -E -c '(vmx|svm)' /proc/cpuinfo
 ```
+> **Note:** If we see a number greater than zero, it means our CPU supports hardware virtualization. If we don't see it, it means this feature is not enabled in the BIOS or the CPU does not support hardware virtualization.
 
 ### 2) Installing KVM and Required Packages
 
