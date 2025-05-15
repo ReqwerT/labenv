@@ -4,7 +4,6 @@
   gather_facts: no
   tasks:
 
-    # On the Ansible control machine, find all .qcow2 files in the shared folder
     - name: Read QCOW2 file names from Ansible control machine
       delegate_to: localhost
       find:
@@ -13,18 +12,15 @@
         recurse: no
       register: local_qcow_files
 
-    # Extract the file names from the full path list
     - name: Extract file names
       set_fact:
         qcow2_filenames: "{{ local_qcow_files.files | map(attribute='path') | map('basename') | list }}"
 
-    # Create the directory in Windows where PowerShell scripts will be stored
     - name: Create PowerShell script folder
       win_file:
         path: "C:\\vagrant_vm_boot"
         state: directory
 
-    # For each QCOW2 file, create a corresponding PowerShell script with an advanced QEMU command
     - name: Create PowerShell scripts for each QCOW2 file (advanced QEMU command)
       win_copy:
         content: |
@@ -39,7 +35,6 @@
       loop: "{{ qcow2_filenames }}"
       when: qcow2_filenames | length > 0
 
-    # For each PowerShell script, create a corresponding .bat file in the Startup folder
     - name: Create .bat file in Startup folder for each PowerShell script
       win_copy:
         content: |
@@ -48,7 +43,6 @@
       loop: "{{ qcow2_filenames }}"
       when: qcow2_filenames | length > 0
 
-    # Reboot the Windows VM to apply changes and start the VMs on GUI login
     - name: Reboot the machine
       win_reboot:
         reboot_timeout: 600
