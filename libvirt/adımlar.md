@@ -1,6 +1,6 @@
 # Vagrant 2.4.5 + Libvirt Kurulumu (Bare Metal Debian)
 
-## 🔧 Vagrant Kurulumu (v2.4.5)
+## Vagrant Kurulumu (v2.4.5)
 
 Öncelikle Vagrant 2.4.5 sürümünü bare metal Debian’a indirelim:
 
@@ -16,7 +16,7 @@ sudo apt update && sudo apt install vagrant
 
 ---
 
-## 🧱 Libvirt Kurulumu
+## Libvirt Kurulumu
 
 Aşağıdaki komutlarla libvirt’i indirip kurabiliriz:
 
@@ -45,7 +45,7 @@ echo "vhost_net" | sudo tee -a /etc/modules
 lsmod | grep vhost
 ```
 
-> 💡 **Not:** Eğer yerel kullanıcı olarak `virsh` komutlarını çalıştırmak istiyorsanız, aşağıdaki komutlarla kullanıcıyı ilgili gruplara ekleyin:
+> **Not:** Eğer yerel kullanıcı olarak `virsh` komutlarını çalıştırmak istiyorsanız, aşağıdaki komutlarla kullanıcıyı ilgili gruplara ekleyin:
 
 ```bash
 sudo adduser $USER libvirt
@@ -54,7 +54,7 @@ sudo adduser $USER libvirt-qemu
 
 ---
 
-## 📦 Vagrant Libvirt Eklentisi Kurulumu
+## Vagrant Libvirt Eklentisi Kurulumu
 
 Kaynak: [vagrant-libvirt GitHub](https://github.com/vagrant-libvirt/vagrant-libvirt/pkgs/rubygems/vagrant-libvirt/125854293)
 
@@ -73,6 +73,6 @@ vagrant plugin install vagrant-libvirt
 
 ---
 
-## ✅ Sonuç
+## Sonuç
 
 Yukarıdaki adımlar sonucunda, Vagrant ve libvirt’i bare metal Debian işletim sistemimize kurmuş oluyoruz.
