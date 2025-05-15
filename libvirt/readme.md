@@ -6,7 +6,7 @@ This project performs automatic virtual machine setup and configuration using **
 
 ## Requirements:
 
-Before we begin, click here to prepare our computer:
+Before we begin, [click here to prepare our computer](https://github.com/ReqwerT/labenv/blob/main/libvirt/Installation_steps.md)
 
 ## Goal/Mission:
 
