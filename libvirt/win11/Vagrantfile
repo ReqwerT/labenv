@@ -10,7 +10,6 @@ Vagrant.configure("2") do |config|
 
      config.vm.synced_folder File.expand_path("../images", __dir__), "C:/users/vagrant/shared_f", type: "rsync", disabled: false
 
-  # rsync senkronizasyonunu 'vagrant up' sonrasında tetiklemek için
   config.vm.provision "shell", inline: <<-SHELL
     echo "Paylaşımlı klasör rsync sonrası hazır."
   SHELL
