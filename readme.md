@@ -5,6 +5,7 @@ In this repo we will set up a test environment on a virtual machine base using t
 ## Goals:
 Our main goal is to perform some tests safely without damaging our real system. That's why we set up a virtual environment. We perform these tests on virtual machines so that operations such as disk partitioning do not harm the computer. We also perform all operations automatically to prevent time loss.
 
+if you want to see the goals in detail [click here](https://github.com/ReqwerT/labenv/blob/main/goals/readme.md)
 
 ## Mission:
 Every time our virtual Windows machine boots up, it will automatically start another virtual machine using QEMU with WHPX acceleration. It will then access the shared folder at C:\Users\vagrant\sf.
