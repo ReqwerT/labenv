@@ -1,72 +1,76 @@
-#  Bare Metal Dual Boot Lab: OpenMediaVault Paylaşım Senaryosu
+# Bare Metal Dual Boot Lab: OpenMediaVault Sharing Scenario
 
-##  Genel Yapı
+## General Structure
 
-Bu lab ortamı, bare metal (donanım düzeyinde) kurulan çift işletim sistemli (dual boot) bir sistem üzerinde çalışır. Sistem iki ana işletim sistemi içerir:
+This lab environment is a dual boot test environment established on bare metal (hardware level) and provides data access between two operating systems using openmediavault. The system contains two main operating systems:
 
-- **Windows 11** (WHPX + QEMU ile sanal makine desteği)
-- **Debian Linux** (KVM/QEMU ile sanal makine desteği)
+- **Windows 11**
+- **Debian Linux**
+In addition to the above, we have the OMV.qcow2 file in a 3rd disk that is shrunk. When we select one of the operating systems above, we access this exFAT disk and run the omv.qcow2 disk as a virtual machine using qemu and a suitable hardware accelerator, and this virtual machine accesses the shared data in the operating system that is not opened.
 
-Her iki sistem de **OpenMediaVault (OMV)** tabanlı bir SANbox sanal sunucuya bağlanır. Bu sunucu, dosya paylaşım hizmetlerini merkezi olarak sunar.
+## Disk Structure and Partitions
+`A sample scenario:`
 
-##  Disk Yapısı ve Bölümler
+Total disk capacity: `100 GB`
 
-Toplam disk kapasitesi: `100 GB`
+| Partition | Size | Description |
+|-----|--------|------------------------------------------------------|
+| Windows (NTFS) | 30 GB | Partition reserved for Windows operating system |
+| Linux (ext4) | 20 GB | Partition reserved for Debian operating system |
+| SANbox (exFAT) | 50 GB | Disk space hosting OMV virtual machine (qcow2 included)|
 
-| Bölüm           | Boyut  | Açıklama                                               |
-|------------------|--------|---------------------------------------------------------|
-| Windows (NTFS)   | 30 GB  | Windows işletim sistemi için ayrılan bölüm              |
-| Linux (ext4)     | 20 GB  | Debian işletim sistemi için ayrılan bölüm               |
-| SANbox (exFAT)   | 50 GB  | OMV sanal makinesini barındıran disk alanı (qcow2 dahil)|
-
-> Windows’a 7 GB kurulum + 23 GB boşluk olacak şekilde 30 GB ayrılır. Kalan 70 GB:
+> 30 GB disk space will be reserved for Windows, 7 GB for installation + 23 GB for free, so that it will not starve in the future. Remaining 70 GB:
 > - 20 GB Linux
 > - 50 GB SANbox
 
-##  SANbox (OpenMediaVault) Sanal Makinesi
+## SANbox (OpenMediaVault) Virtual Machine
 
 - Format: `qcow2`
-- Depolama: `SANbox` bölümü içerisinde
-- Disk formatı: `exFAT` (hem Linux hem Windows tarafından yazılabilir)
-- İşletim sistemi: `OpenMediaVault` (NAS platformu)
+- Storage: 50Gb in `SANbox` partition
+- Disk format: `exFAT` (so that it can be written/read by both Linux and Windows)
+- Operating system: `OpenMediaVault` (NAS platform)
 
-##  Dual Boot Davranışı
+## Dual Boot Behavior
 
-### 1. Windows Açıldığında
+### 1. When Windows is Started
 
-- Windows işletim sistemi başlatılır.
-- `QEMU` + `WHPX` kullanılarak `OMV.qcow2` sanal makinesi başlatılır.
-- OpenMediaVault üzerinde paylaştırılmış klasörler otomatik olarak **SMB protokolü** ile Windows’a mount edilir.
-- **Linux diskindeki veriler**, OMV üzerinden erişilerek Windows tarafından kullanılabilir.
+- Windows operating system is started.
+- `OMV.qcow2` virtual machine is started using `QEMU` + `WHPX`.
+- Shared folders on OpenMediaVault are automatically mounted to Windows with **SMB protocol**.
+- **Data on Linux disk** can be accessed via OMV and used by Windows.
 
-### 2. Linux Açıldığında
+### 2. When Linux is Started
 
-- Debian işletim sistemi başlatılır.
-- `QEMU` + `KVM` ile `OMV.qcow2` sanal makinesi ayağa kaldırılır.
-- OpenMediaVault tarafından paylaştırılan klasörler **NFS protokolü** ile mount edilir.
-- **Windows diskindeki veriler**, OMV üzerinden erişilerek Linux tarafından kullanılabilir.
+- Debian operating system is started.
+- `QEMU` + `KVM` and `OMV.qcow2` virtual machine is started.
+- Folders shared by OpenMediaVault are mounted with **NFS protocol**.
+- **Data on Windows disk** is accessed via OMV and becomes available, readable and modifiable by Linux.
 
-## Paylaşım Yöntemleri
+## Sharing Methods
 
-| İşletim Sistemi | Bağlantı Teknolojisi | Paylaşım Yolu |
-|------------------|------------------------|----------------|
-| Windows          | WHPX + QEMU            | SMB            |
-| Linux            | KVM + QEMU             | NFS            |
+| Operating System | Virtual Machine Technology | Sharing Path |
+|-----|------------------------|----------------|
+| Windows | WHPX + QEMU | SMB |
+| Linux | KVM + QEMU | NFS |
 
-##  Akış Şeması
+## Flowchart
 
-1. Sistem dual boot olacak. Diskimiz 2 defa shrink olacak. Birisi Linux, Birisi Windows ve sonuncusu SANBox için ayrılacak. Linux ve Windows disklerimiz, dual boot olacak.
-2. Sanal makinemiz her açıldığında, bize windows mu yoksa linux mu seçmek istediğimizi soracak.
-3. Ardından seçilen işletim sistemi, exFAT formatlı SANbox diskine erişecek.
-4. SANBox diski içerisindeki `OMV.qcow2` imaj dosyamızı, qemu ve gerekli hızlandırı kullanarak çalıştıracak (Windows için whpx, linux için kvm).
-5. OMV sanal NAS, dosya paylaşım protokolleri üzerinden diğer işletim sistemlerinin paylaşılan klasörlerini sunacak. Bu sayede windows içerisinden, linuxtaki verilere erişebilirken, linux içerisinden windows içerisindeki verilere erişebileceğiz ve değişiklik yapabileceğiz.
-6. Linux dosya paylaşımı için NFS kullanırken, windows dosya paylaşımı için SMB kullanacağız.
+1. The system will be dual boot. Our disk will be shrunk 2 times. One will be reserved for Linux, one for Windows and the last one for SANBox. Our Linux and Windows disks will be dual boot.
+2. Every time our virtual machine opens, it will ask us whether we want to choose Windows or Linux.
+3. Then the selected operating system will access the exFAT formatted SANbox disk.
 
-##  Notlar
+4. It will run our `OMV.qcow2` image file in the SANBox disk using qemu and the required speed (whpx for Windows, kvm for Linux).
 
-- `exFAT` dosya sistemi sayesinde hem Windows hem de Linux, SANbox diskini okuyabilecek ve bu diske veri yazabilecek.
-- OMV sanal makinesi dosya paylaşımını yöneterek sistemler arası veri bütünlüğünü sağlayacak.
-- Yazılan yml dosyası ile ansible kulanılarak, sanal windows diskimiz üzerinde otomatik biçimde shrink işlemlerini yapabileceğiz.
+5. OMV virtual NAS will offer shared folders of other operating systems via file sharing protocols. In this way, we will be able to access data in Linux from within Windows, and we will be able to access and make changes to data in Windows from within Linux.
+
+6. While we use NFS for Linux file sharing, we will use SMB for Windows file sharing.
+
+## Notes
+
+- Thanks to the `exFAT` file system, both Windows and Linux will be able to read and write data to the SANbox disk.
+
+- The OMV virtual machine will manage file sharing and ensure data integrity between systems.
+
+- With the written yml file, we will be able to perform shrink operations automatically on our virtual Windows disk using Ansible.
 
 ---
-
