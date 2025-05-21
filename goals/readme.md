@@ -1,4 +1,4 @@
-# Bare Metal Dual Boot Lab: OpenMediaVault Sharing Scenario
+# Bare Metal Dual Boot Lab: OpenMediaVault Sharing Task
 
 ## General Structure
 
