@@ -56,7 +56,9 @@ Total disk capacity: `100 GB`
 ## Flowchart
 
 1. The system will be dual boot. Our disk will be shrunk 2 times. One will be reserved for Linux, one for Windows and the last one for SANBox. Our Linux and Windows disks will be dual boot.
-2. Every time our virtual machine opens, it will ask us whether we want to choose Windows or Linux.
+
+2. Each time the physical system is started, the user selects the Windows or Debian Linux operating system via GRUB or Windows Boot Manager. After the selected operating system starts, the OMV.qcow2 virtual machine on the common SANbox disk is automatically started. In this case, OMV accesses the disk of the operating system that is not running (i.e. not selected) and provides network sharing (SMB for Windows, NFS for Linux). In this way, OMV acts as a data bridge between the two systems. In other words, the selected operating system provides easy access to the data on the non-selected operating system.
+
 3. Then the selected operating system will access the exFAT formatted SANbox disk.
 
 4. It will run our `OMV.qcow2` image file in the SANBox disk using qemu and the required speed (whpx for Windows, kvm for Linux).
