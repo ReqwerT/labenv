@@ -10,6 +10,10 @@ if you want to see the goals in detail [click here](https://github.com/ReqwerT/l
 ## Mission:
 Every time our virtual Windows machine boots up, it will automatically start another virtual machine using QEMU with WHPX acceleration. It will then access the shared folder at C:\Users\vagrant\sf.
 
+## Our Location on the Project Map and the Next Task:
+  Bu görev ile, vagrant kullanarak 2 sanal makine çalıştırdık. Bunlardan birisi ansible sidecar diğeri windows makinemiz. Ansible ile windows makinemizi yöneterek, windows her açıldığında qemu üzerinden bir sanal makine başlatıyor. 
+  Sıradaki görevimiz ise, windows sanal makinemiz üzerinden, ansible kullanarak otomatik biçimde disk shrink yapacağız. Shrink edilen bir disk içerisine linux kurup dual boot olarak ayarlayacağız ve bu iki işletim sisteminden birini açtığımızda,         diğerinden ovm.qcow2 uzantılı dosya ile sanal makine çalıştırarak, openmediavault aracılığı ile diğer işletim sisteminin dosyalarına erişim sağlayacağız.
+
 
 ## Using Providers:
   - [**Libvirt**](https://github.com/ReqwerT/labenv/tree/main/libvirt)
